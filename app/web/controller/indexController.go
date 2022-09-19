@@ -14,7 +14,7 @@ import (
 
 const viewPathIndex = "admin/index/"
 
-// index
+// dashboard runner
 func Index(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
 	flashMsg := stncsession.GetFlashMessage(c)
@@ -33,12 +33,8 @@ func Index(c *gin.Context) {
 	)
 }
 
-// OptionsDefault all list f
-// TODO: bu kisim baska isimle acilibilir
 func OptionsDefault(c *gin.Context) {
 	// stncsession.IsLoggedInRedirect(c)
-
-	//buraya bir oprion otılacak bunlar giriş yaptıktan sonra veri varmı yok mu bakacak
 
 	db := repository.DB
 
@@ -132,7 +128,7 @@ func OptionsDefault(c *gin.Context) {
 // OptionsDefault all list f
 func CacheReset(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
-	stncsession.SetFlashMessage("Cache Temizlendi", "success", c)
+	stncsession.SetFlashMessage("Cache Clenear", "success", c)
 	redisClient := cache.RedisDBInit()
 	redisClient.FlushAll()
 	c.Redirect(http.StatusMovedPermanently, "/admin/options/")

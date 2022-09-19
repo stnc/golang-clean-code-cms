@@ -31,7 +31,7 @@ func InitOptions(OptionsApp services.OptionsAppInterface) *Options {
 	}
 }
 
-// Index list
+// option list data
 func (access *Options) Index(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
 	flashMsg := stncsession.GetFlashMessage(c)
@@ -89,7 +89,6 @@ func (access *Options) Index(c *gin.Context) {
 // Update list
 func (access *Options) Update(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
-
 	access.OptionsApp.SetOption("hisse_adeti", c.PostForm("hisse_adeti"))
 	access.OptionsApp.SetOption("satis_birim_fiyati_1", c.PostForm("satis_birim_fiyati_1"))
 	access.OptionsApp.SetOption("satis_birim_fiyati_2", c.PostForm("satis_birim_fiyati_2"))
@@ -115,8 +114,7 @@ func (access *Options) Update(c *gin.Context) {
 
 }
 
-// Receipt No generator
-// makbuz no üretir
+// Receipt No generator  tr: makbuz no üretir
 func (access *Options) ReceiptNo(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
 

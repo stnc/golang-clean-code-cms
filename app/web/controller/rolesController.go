@@ -111,9 +111,7 @@ func (access *Roles) Store(c *gin.Context) {
 		Slug:  c.PostForm("Title"),
 	}
 	saveRoleData, _ := access.roleApp.Save(&roleData)
-
 	roleID := saveRoleData.ID
-
 	var data []dto.ModulesAndPermission
 	data, _ = access.modulesApp.GetAllModulesMerge()
 	for num, v := range data {

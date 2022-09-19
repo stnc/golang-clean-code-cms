@@ -1,0 +1,61 @@
+<div class="card">
+  <div class="card-header">
+    <strong>Resim Bilgileri</strong>
+  </div>
+
+  <div class="card-body">
+    <div class="row popup-gallery">
+      {% for media in medias %}
+
+      <div class=" col-md-2 mb-4 elemMedia-{{media.ID}}">
+        {% if media.MimeType!="video/mp4" %}
+        <div class="bg-white rounded shadow-sm ">
+          <a class="image" title="{{media.MediaName|truncatechars:15}}"
+            href="/{{ fileConfig.uploadSymbol }}big/{{media.MediaName}}">
+            <img src="/{{ fileConfig.uploadSymbol }}thumb/{{media.MediaName}}"
+              alt="{{media.MediaName|title|truncatechars:15}}" class="img-fluid card-img-top ">
+          </a>
+          <div class="p-4">
+            <small class="text-dark"> {{media.MediaName|truncatechars:20}}</small>
+            <a href="#" class="btn btn-block btn-outline-danger active stncElemMedia" data-id="{{media.ID}}">SİL</a>
+
+          </div>
+        </div>
+
+        {% endif %}
+        {% if media.MimeType=="video/mp4" %}
+        <div class="bg-white rounded shadow-sm ">
+          <a class="popup-youtube" title="{{media.MediaName|truncatechars:10}}"
+            href="/{{ fileConfig.uploadSymbol }}{{media.MediaName}}">
+            <img src="/assets/admin/icons/video.png" alt="{{media.MediaName|truncatechars:15}}"
+              class="img-fluid card-img-top ">
+          </a>
+          <div class="p-4">
+            <small class="text-dark"> VİDEO</small>
+            <a href="#" class="btn btn-block btn-outline-danger active stncElemMedia" data-id="{{media.ID}}">SİL</a>
+          </div>
+
+
+        </div>
+
+
+        {% endif %}
+
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        {% if fileConfig.text!="" %}
+         <div class="alert alert-danger" role="alert">
+             <span class="note needsclick">   {{ fileConfig.text|safe }} </span>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+

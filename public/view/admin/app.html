@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" style="--theme-deafult:#168eea; --theme-secondary:#90b4cd;">
+  <head>
+    {% include "header.html" %}
+  </head>
+
+
+  <body>
+    <!-- Loader starts-->
+    <div class="loader-wrapper">
+      <div class="theme-loader">    
+        <div class="loader-p"></div>
+      </div>
+    </div>
+    <!-- Loader ends-->
+    <!-- page-wrapper Start-->
+    <div class="page-wrapper" id="pageWrapper">
+      {% include "Page-Main.html" %}
+      
+      <!-- Page Body Start-->
+      <div class="page-body-wrapper horizontal-menu">
+        {% include "MENUSMainSidebarCMS.html"   with lang=localeMenus %}
+        <div class="page-body">
+          <div class="container-fluid">
+          {% block content %}{% endblock %}
+          </div>
+        </div>
+        <!-- footer start-->
+        {% include "footer.html" %}
+
+      </div>
+    </div>
+    {% include "footerJSfiles.html" %}
+    {% block jsInline %}{% endblock %}
+
+  </body>
+</html>

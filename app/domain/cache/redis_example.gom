@@ -1,0 +1,155 @@
+package cache2
+
+import (
+	"database/sql"
+	"encoding/json"
+	"fmt"
+	"time"
+
+	"github.com/go-redis/redis"
+	_ "github.com/lib/pq"
+)
+
+type Users struct {
+	ID          uint64 `gorm:"primary_key;auto_increment" json:"id"`
+	UserID      uint64 `gorm:"not null;" json:"userId"`
+	UserName    string `gorm:"type:varchar(255) ;not null;" json:"username"`
+	FirstName   string `gorm:"type:varchar(255) ;not null;" json:"firstName"`
+	LastName    string `gorm:"type:varchar(255) ;not null;" json:"lastName"`
+	Email       string `gorm:"type:varchar(255) ;" validate:"email"  json:"emailAdres"` //`gorm:"type:varchar(255) ;" validate:"required,email"  json:"emailAdres"`
+	Password    string `gorm:"type:varchar(255) ;column:password"   `
+	TimeZone    string `gorm:"type:varchar(255) ;column:time_zone"   `
+	Description string `gorm:"type:text ;" json:"short_content"`
+
+	PasswordReset string `gorm:"type:varchar(255) ;column:password_reset"  `
+	Status        int    `gorm:"type:smallint ;NOT NULL;DEFAULT:'1'"  json:"status" `
+	Activation    int    `gorm:"type:smallint ;NOT NULL;DEFAULT:'1'" json:"activation" `
+	BranchID      int    `gorm:"type:smallint ;NOT NULL;DEFAULT:'1'" json:"branchID" `
+
+	CreatedAt time.Time  ` json:"createdAt"`
+	UpdatedAt time.Time  ` json:"updatedAt"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
+}
+
+type JsonResponse struct {
+	Data   []Users `json:"data"`
+	Source string  `json:"source"`
+}
+
+func main() {
+	// fetchFromDb()
+	getProducts()
+}
+
+func getProducts() (*JsonResponse, error) {
+
+	redisClient := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "MDNcVb924a",
+		DB:       0,
+	})
+
+	// ctx := context.Background()
+
+	cachedProducts, err := redisClient.Get("products").Bytes()
+
+	response := JsonResponse{}
+
+	if err != nil {
+
+		dbProducts, err := fetchFromDb()
+
+		if err != nil {
+			return nil, err
+		}
+
+		cachedProducts, err = json.Marshal(dbProducts)
+
+		if err != nil {
+			return nil, err
+		}
+		//7200 5 gun eder
+		err = redisClient.Set("products", cachedProducts, time.Minute*7200).Err()
+
+		if err != nil {
+			return nil, err
+		}
+
+		response = JsonResponse{Data: dbProducts, Source: "PostgreSQL"}
+		// empJSON, err := json.MarshalIndent(response, "", "  ")
+		// if err != nil {
+		// 	log.Fatalf(err.Error())
+		// }
+		// fmt.Printf("MarshalIndent funnction output\n %s\n", string(empJSON))
+		return &response, err
+	}
+
+	products := []Users{}
+
+	err = json.Unmarshal(cachedProducts, &products)
+
+	if err != nil {
+		return nil, err
+	}
+
+	response = JsonResponse{Data: products, Source: "Redis Cache"}
+
+	// //#json formatter #stncjson
+	// empJSON, err := json.MarshalIndent(response, "", "  ")
+	// if err != nil {
+	// 	log.Fatalf(err.Error())
+	// }
+	// fmt.Printf("MarshalIndent funnction output\n %s\n", string(empJSON))
+
+	return &response, nil
+}
+
+const (
+	DB_USER     = "postgres"
+	DB_PASSWORD = "changeme"
+	DB_NAME     = "krbn"
+)
+
+func fetchFromDb() ([]Users, error) {
+
+	dbinfo := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable",
+		DB_USER, DB_PASSWORD, DB_NAME)
+	db, err := sql.Open("postgres", dbinfo)
+	checkErr(err)
+	defer db.Close()
+
+	fmt.Println("# Querying")
+	rows, err := db.Query("SELECT id,user_name,last_name FROM users")
+	checkErr(err)
+
+	var records []Users
+
+	for rows.Next() {
+
+		var p Users
+
+		err = rows.Scan(&p.Email, &p.FirstName, &p.LastName)
+		checkErr(err)
+		// fmt.Println(p.Email)
+		// fmt.Println(p.FirstName)
+		// fmt.Println(p.LastName)
+		records = append(records, p)
+
+		if err != nil {
+			return nil, err
+		}
+
+	}
+	return records, nil
+}
+func checkErr(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+
+// empJSON, err := json.MarshalIndent(records, "", "  ")
+// if err != nil {
+// 	log.Fatalf(err.Error())
+// }
+// fmt.Printf("MarshalIndent funnction output\n %s\n", string(empJSON))

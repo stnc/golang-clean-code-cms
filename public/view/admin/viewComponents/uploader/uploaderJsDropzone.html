@@ -1,0 +1,143 @@
+<!-- 1 -->
+<link rel='stylesheet' id='dropzone3-css' href='https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.3.0/dropzone.css?ver=5.9.1' media='all' />
+<script src="/assets/admin/stnc-upload/js/dropzone.min.js"></script>
+<!-- bu konuda en iyi ornek wordpress eklentısı olarak  https://github.com/stnc/wp-form bu eklentidir. 
+
+https://preview.keenthemes.com/craft/documentation/forms/dropzonejs.html
+-->
+<script>
+  function toastrCall(status, msg) {
+    toastr.options = {
+      "closeButton": true,
+      "debug": false,
+      "newestOnTop": true,
+      "progressBar": true,
+      "positionClass": "toast-top-center",
+      "preventDuplicates": false,
+      "onclick": null,
+      "showDuration": "300",
+      "hideDuration": "1000",
+      "timeOut": "5000",
+      "extendedTimeOut": "1000",
+      "showEasing": "swing",
+      "hideEasing": "linear",
+      "showMethod": "fadeIn",
+      "hideMethod": "fadeOut"
+    }
+    toastr[status](msg);
+  }
+  Dropzone.autoDiscover = false;
+  const id = "#kt_dropzonejs_example_2";
+  const dropzone = document.querySelector(id);
+  // set the preview element template
+  var previewNode = dropzone.querySelector(".dropzone-item");
+  previewNode.id = "";
+  var previewTemplate = previewNode.parentNode.innerHTML;
+  previewNode.parentNode.removeChild(previewNode);
+  var myDropzone = new Dropzone(id, { // Make the whole body a dropzone
+    url: "/admin/{{ fileConfig.modulName }}/upload/{{ID}}", // Set the url
+    init: function() {
+      this.on("sending", function(file, xhr, formData) {
+        formData.append("_csrf", "{{ csrf }}");
+        console.log(formData)
+      });
+      this.on("error", function(file, responseText) {
+        toastrCall("warning", responseText);
+      });
+      this.on("success", function(file, responseText) {
+        toastrCall("success", responseText);
+      });
+    },
+    addRemoveLinks: true,
+    previewTemplate: previewTemplate,
+    autoProcessQueue: true,
+    maxFiles: {{fileConfig.maxFiles}}, //https://www.infinetsoft.com/Post/How-to-set-limits-for-file-upload-in-dropzone-js/2534#.YIvbS2YzbJ9
+    maxFilesize: {{fileConfig.uploadSize}}, //max file size in MB
+    acceptedFiles: "{{fileConfig.fileType }}",
+    //   acceptedFiles-: 'audio/mpeg,image/png', //  acceptedFiles: 'image/*,"
+    thumbnailWidth: 80,
+    thumbnailHeight: 80,
+    parallelUploads: 2,
+    uploadMultiple: false,
+    autoQueue: false, // Make sure the files aren't queued until manually added
+    previewsContainer: id + " .dropzone-items", // Define the container to display the previews
+    clickable: id + " .dropzone-select", // Define the element that should be used as click trigger to select files.
+  });
+  myDropzone.on("addedfile", function(file) {
+    // Hookup the start button
+    file.previewElement.querySelector(id + " .dropzone-start").onclick = function() {
+      myDropzone.enqueueFile(file);
+    };
+    const dropzoneItems = dropzone.querySelectorAll('.dropzone-item');
+    dropzoneItems.forEach(dropzoneItem => {
+      dropzoneItem.style.display = '';
+    });
+    dropzone.querySelector('.dropzone-upload').style.display = "inline-block";
+    dropzone.querySelector('.dropzone-remove-all').style.display = "inline-block";
+  });
+  myDropzone.on("complete", function(file) {
+    myDropzone.removeFile(file);
+  });
+  // Update the total progress bar
+  myDropzone.on("totaluploadprogress", function(progress) {
+    const progressBars = dropzone.querySelectorAll('.progress-bar');
+    progressBars.forEach(progressBar => {
+      progressBar.style.width = progress + "%";
+    });
+  });
+  myDropzone.on("sending", function(file) {
+    // Show the total progress bar when upload starts
+    const progressBars = dropzone.querySelectorAll('.progress-bar');
+    progressBars.forEach(progressBar => {
+      progressBar.style.opacity = "1";
+    });
+    // And disable the start button
+    file.previewElement.querySelector(id + " .dropzone-start").setAttribute("disabled", "disabled");
+  });
+  // Hide the total progress bar when nothing's uploading anymore
+  myDropzone.on("complete", function(progress) {
+    const progressBars = dropzone.querySelectorAll('.dz-complete');
+    setTimeout(function() {
+      progressBars.forEach(progressBar => {
+        progressBar.querySelector('.progress-bar').style.opacity = "0";
+        progressBar.querySelector('.progress').style.opacity = "0";
+        progressBar.querySelector('.dropzone-start').style.opacity = "0";
+      });
+    }, 300);
+  });
+  // Setup the buttons for all transfers
+  // The "add files" button doesn't need to be setup because the config
+  // `clickable` has already been specified.
+  // Setup the buttons for all transfers
+  dropzone.querySelector(".dropzone-upload").addEventListener('click', function() {
+    myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
+  });
+  // Setup the button for remove all files
+  dropzone.querySelector(".dropzone-remove-all").addEventListener('click', function() {
+    dropzone.querySelector('.dropzone-upload').style.display = "none";
+    dropzone.querySelector('.dropzone-remove-all').style.display = "none";
+    myDropzone.removeAllFiles(true);
+  });
+  // On all files completed upload
+  myDropzone.on("queuecomplete", function(progress) {
+    const uploadIcons = dropzone.querySelectorAll('.dropzone-upload');
+    uploadIcons.forEach(uploadIcon => {
+      uploadIcon.style.display = "none";
+    });
+  });
+  // On all files removed
+  myDropzone.on("removedfile", function(file) {
+    if (myDropzone.files.length < 1) {
+      dropzone.querySelector('.dropzone-upload').style.display = "none";
+      dropzone.querySelector('.dropzone-remove-all').style.display = "none";
+    }
+  });
+  // document.querySelector("#actions .cancel").onclick = function() {
+  //   //alert("ipral")
+  //   myDropzone.removeAllFiles(true);
+  // };
+  //TODO: jquery document ile yapılması gerekiyor
+  //  document.querySelector("#previews .delete").onclick = function () {
+  //      myDropzone.removeAllFiles(true);
+  //  };
+</script>

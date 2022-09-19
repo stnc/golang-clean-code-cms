@@ -1,0 +1,117 @@
+<!--Loop over the `payload` variable, which is the list of articles-->
+{% extends "../app.html" %} 
+{% block content %}
+  {% set RootName = 'admin-user' %}
+  {% set routerName = 'admin/user' %}
+ {% if flashMsg %}
+<div class="row">
+    <div class="col-md-12 flashMsg">
+
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h5><i class="icon fas fa-check"></i> Uyarı!</h5>
+            {{flashMsg}}
+        </div>
+    </div>
+</div>
+{%endif%}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header"><i class="fa fa-align-justify"></i> User list</div>
+            <div class="card-body">
+                <table class="table table-responsive-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+                        {% for data in allData %}
+
+                        <tr>
+                            <td>{{data.UserName|title|truncatechars:35 }}</td>
+                            <td> {{tarih.OnlyDate(data.CreatedAt.String())}}</td>
+                            <td><span class="badge badge-success">
+                                     {% if data.Status==0 %}
+                              Unpublished
+                                {% elif  data.Status==1 %}
+                                   Yayında
+                                {% elif  data.Status==3 %}
+                                 Archived
+                               {% elif  data.Status==2 %}
+                                   Draft
+                               {% endif  %} 
+                            </span></td>
+                            <td>
+
+
+
+
+
+                                <a class="btn btn-warning" href="/admin/user/edit/{{data.ID}}">Düzenle</a>
+                                <div class="btn-group btn-block-">
+                                    <button class="btn btn-primary dropdown-toggle btn-block-" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Olaylar</button>
+                                    <div class="dropdown-menu" x-placement="bottom-start" style="will-change: transform; margin: 0px;">
+                                        <a class="dropdown-item" href="/admin/user/edit/{{data.ID}}">Düzenle</a> {% if data.Status==1 %}
+                                        <a class="dropdown-item" href="/admin/user/status/{{data.ID}}?status=0">Yayından Kaldır</a> {% else %}
+                                        <a class="dropdown-item" href="/admin/user/status/{{data.ID}}?status=1">Yayınla</a> {% endif %}
+
+                                        <a class="dropdown-item" href="/admin/user/status/{{data.ID}}?status=2">Taslak durumuna getir</a>
+                                        <a class="dropdown-item" href="/admin/user/status/{{data.ID}}?status=3">Arşive Kaldır</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="/admin/user/delete/{{data.ID}}">Sil</a>
+                                    </div>
+                                </div>
+
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+                <nav>
+
+                    {% if paginator.HasPages() %}
+                    <ul class="pagination">
+                        {%if paginator.HasPrev() %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{paginator.PageLinkFirst()}}">İlk</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="{{paginator.PageLinkPrev()}}">&lt;</a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled"><a class="page-link"> İlk</a></li>
+                        <li class="page-item disabled"><a class="page-link">&lt;</a></li>
+                        {% endif %} {% for page in paginator.Pages%}
+
+                        <li {% if paginator.IsActive(page) %} class="active page-item" {% endif %}>
+                            <a class="page-link" href="{{ paginator.PageLink(page) }} ">{{page}}</a>
+                        </li>
+
+                        {% endfor %} {% if paginator.HasNext %}
+                        <li class="page-item"><a class="page-link" href="{{paginator.PageLinkNext()}}">&gt; </a></li>
+                        <li class="page-item"><a class="page-link" href="{{paginator.PageLinkLast()}}">Son </a></li>
+                        {% else %}
+                        <li class="disabled page-item"><a class="page-link">&gt;</a></li>
+                        <li class="disabled page-item"><a class="page-link">Son</a></li>
+                        {%endif%}
+                    </ul>
+                    {%endif%}
+                </nav>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %} {% block jsInline %} {% endblock %}

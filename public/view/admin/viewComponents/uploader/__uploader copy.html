@@ -1,0 +1,98 @@
+<div style="    border: 2px dashed #0087F7;" class="dropzone needsclick dz-clickable">
+    <div class="dz-message needsclick">
+        
+   
+
+        <div class="alert alert-warning" role="alert"><button type="button" class="dz-button">Resimleri sürükle bırak ile bu alana atınız veya dosya/ resim yükleme butonunu kullanınız</button></div>
+
+        <br>
+            <div class="alert alert-info" role="alert">
+
+
+                <strong style="color: brown;">DİKKAT: Resim {{ fileConfig.bigImageWidth }}w*{{ fileConfig.bigImageHeight }}h   pixel olmalıdır, resim boyutu farklı olsa bile 
+                  {{ fileConfig.bigImageWidth }}*{{ fileConfig.bigImageHeight }} pixel boyutuna ayarlanır</strong>
+               <br>
+               VİDEO 
+               <strong style="color: brown;"> Video sistem tarafından boyutlandırılmaz </strong>
+               <!-- <strong style="color: brown;">Video Boyutu {{ fileConfig.bigImageWidth }}w*{{ fileConfig.bigImageHeight }}h pixel olmalıdır. Video sistem tarafından 
+                    boyutlandırılmaz </strong> -->
+                 <br>
+             <strong style="color: brown;">Maksimum video veya resim boyutu {{ fileConfig.uploadSize }} MB olmalıdır</strong>
+
+
+
+             </div>
+
+          
+
+            <div id="actions" class="row">
+
+                <div class="col-lg-7">
+                  <!-- The fileinput-button span is used to style the file input field as button -->
+                  <span class=" btn btn-success text-white  fileinput-button">
+                      <i class="glyphicon glyphicon-plus"></i>
+                      <span>Dosya Ekle...</span>
+                  </span>
+               
+
+                  <a class="btn btn-primary text-white start">
+                    <svg class="c-icon">
+                    <use xlink:href="/assets/admin/vendors/@coreui/icons/svg/free.svg#cil-lightbulb"></use>
+                    </svg>&nbsp;Yüklemeyi başlat
+                  </a>
+                  <a  class="btn btn-warning   cancel">
+                      <i class="glyphicon glyphicon-ban-circle"></i>
+                      <span>Yüklemeyi İptal Et</span>
+                  </a>
+                </div>
+          
+                <div class="col-lg-5">
+                  <!-- The global file processing state -->
+                  <span class="fileupload-process">
+                    <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                      <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+                    </div>
+                  </span>
+                </div>
+          
+                <div class="table-upload table table-striped files" id="previews">
+
+                    <div id="template" class="file-row">
+                      <!-- This is used as the file preview template -->
+                      <div>
+                          <span class="preview"><img data-dz-thumbnail /></span>
+                      </div>
+                      <div>
+                          <p class="name" data-dz-name></p>
+                          <strong class="error text-danger" data-dz-errormessage></strong>
+                      </div>
+                      <div>
+                          <p class="size" data-dz-size></p>
+                          <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                            <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+                          </div>
+                      </div>
+                      <div>
+                       
+                        <a class="btn btn-primary text-white start">
+                          <svg class="c-icon">
+                            <use xlink:href="/assets/admin/vendors/@coreui/icons/svg/free.svg#cil-lightbulb"></use>
+                            </svg>&nbsp; Başlat
+                        </a>
+                        <a data-dz-remove class="btn btn-danger text-white  cancel">
+                            <i class="glyphicon glyphicon-ban-circle"></i>
+                            <span>İptal</span>
+                        </a>
+                        <!-- <a data-dz-remove class="btn btn-danger delete">
+                          <i class="glyphicon glyphicon-trash"></i>
+                          <span>Sil</span>
+                        </a> -->
+                      </div>
+                    </div>
+
+              </div>
+
+              
+    </div>
+    </div>
+</div>

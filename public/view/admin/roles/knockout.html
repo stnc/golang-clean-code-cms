@@ -1,0 +1,76 @@
+
+{% extends "../app.html" %} 
+{% block content %} 
+{% set RootName = 'admin-roles' %}
+ {% set routerName = 'admin/roles' %}
+ {% include "../viewComponents/alertMsg.html"%}
+ <!-- https://stackoverflow.com/questions/48369653/knockout-js-iterate-a-array-of-object-using-json 
+
+https://jsfiddle.net/selmantunc/d9rekcu6/2/-->
+ <script src="https://knockoutjs.com/downloads/knockout-3.2.0.js"></script>
+<div class="row">
+    <div class="col-sm-12 col-xl-6 xl-100">
+        <div class="card">
+          <div class="card-header pb-0">
+            <h5>Tabs Vertical</h5>
+          </div>
+          <div class="card-body">
+            <div class="row"  >
+              <div class="col-sm-3 col-xs-12" >
+                <div  data-bind="foreach:  { data: contacts, as: 'con' }" class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <!-- <a data-bind="text: ModulName, click: $root.removeGift, id:'v-pills-' + ID, aria-labelledby:'v-pills-' + ID +'-tab', href:'#v-pills-' + ID , aria-controls:'v-pills-' + ID ,attr:{class:  $index() == 0 ? 'nav-link active' : 'nav-link'}  "  data-bs-toggle="pill" role="tab"  aria-selected="true"></a> -->
+                    <a data-bind="text: con.modulName,  click:$root.searchManager(con.id), id:'v-pills-' + con.id, aria-labelledby:'v-pills-' + con.id +'-tab', href:'#v-pills-' + con.id , aria-controls:'v-pills-' + con.id ,attr:{class:  $index() == 0 ? 'nav-link active' : 'nav-link'}  "  data-bs-toggle="pill" role="tab"  aria-selected="true"></a>
+                </div>
+              </div>
+              <div class="col-sm-9 col-xs-12" >
+                <div class="tab-content" id="v-pills-tabContent"  >
+                <!-- ko foreach: { data: contacts, as: 'category' } -->
+                    <div class="tab-pane fade "  data-bind="id:'v-pills-' + category.id, aria-labelledby:'v-pills-' + category.id +'-tab'"  role="tabpanel">
+                      <!-- ko foreach:Permissions-->
+                           <strong data-bind="text: title"></strong>
+                    <!-- /ko -->
+                    </div>
+                <!-- /ko -->
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+<!-- end -->
+
+{% endblock %} 
+{% block jsInline %}
+<script>
+var initialData =
+ {% autoescape off %}
+ {{json}}
+{% endautoescape %};
+
+var ContactsModel = function(contacts) {
+    var self = this;
+    self.contacts = ko.observableArray(ko.utils.arrayMap(contacts, function(contact) {
+        return { modulName: contact.modulName, id: contact.ID, Permissions: ko.observableArray(contact.Permissions) };
+    }));
+
+    self.removeGift = function(gift) {
+      console.log  (gift)
+    };
+ 
+    self.searchManager = function (id) {
+        console.log(id);
+    };
+ 
+    self.save = function() {
+        self.lastSavedJson(JSON.stringify(ko.toJS(self.contacts), null, 2));
+    };
+ 
+    self.lastSavedJson = ko.observable("")
+};
+
+ko.applyBindings(new ContactsModel(initialData));
+</script>
+
+{% endblock %}

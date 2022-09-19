@@ -1,0 +1,222 @@
+<!--Loop over the `payload` variable, which is the list of articles-->
+{% extends "../app.html" %}
+{% block content %}
+{% set RootName = 'admin-user' %}
+{% set routerName ='admin/user' %}
+
+{% if flashMsg %}
+<div class="row">
+    <!-- alert -->
+    <div class="col-md-12 flashMsg">
+        <div class="alert alert-success alert-dismissible fade show" role="alert"> {{flashMsg}}
+            <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+                <span aria-hidden="true">×</span></button>
+        </div>
+    </div>
+    <!-- /.alert -->
+</div>
+{%endif%}
+
+<form accept-charset="UTF-8" action="/{{routerName}}/update" enctype="multipart/form-data" method="POST">
+    <input name="_csrf" type="hidden" value="{{ csrf }}">
+    <input name="_method" type="hidden" value="PUT">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong> Add New User </strong>
+                            <small> Create a brand new user and add them to this site. </small>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="row">
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+                                        <label for="UserNameNew"> Username</label>
+                                        <input class="form-control {{err.UserName_valid}}" id="UserNameNew"
+                                               name="UserNameNew"
+                                               type="text" value="{{data.UserName}}">
+                                        {% if err.UserName_error %}
+                                        <div class="invalid-feedback" style="display:block">{{err.UserName}}</div>
+                                        {% endif %}
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label for="EmailNew"> Email </label>
+                                        <small class="red-color">*</small>
+                                        <input class="form-control {{err.EmailNew_valid}}" id="EmailNew" name="EmailNew" type="text" value="{{data.Email}}">
+
+                                        {% if err.Email_error %}
+                                        <div class="invalid-feedback" style="display:block">{{err.Email}}</div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="Phone"> Phone </label>
+                                        <input class="form-control {{err.Phone_valid}}" id="Phone" name="Phone"
+                                               type="text" value="{{data.Phone}}">
+                                        {% if err.Phone_error %}
+                                        <div class="invalid-feedback" style="display:block">{{err.Phone}}</div>
+                                        {% endif %}
+                                    </div>
+
+
+                                </div>
+
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+                                        <label for="FirstName"> First Name </label>
+                                        <input class="form-control {{err.FirstName_valid}}" id="FirstName"
+                                               name="FirstName" type="text" value="{{data.FirstName}}">
+                                        {% if err.FirstName_error %}
+                                        <div class="invalid-feedback" style="display:block">{{err.FirstName}}</div>
+                                        {% endif %}
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label for="LastName"> Lastname </label>
+                                        <input class="form-control {{err.LastName_valid}}" id="LastName" name="LastName"
+                                               type="text" value="{{data.LastName}}">
+                                        {% if err.LastName_error %}
+                                        <div class="invalid-feedback" style="display:block">{{err.LastName}}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+
+
+                        <div class="card-body">
+
+                            <div class="form-group">
+                                <label f>Password</label>
+                                <button class="btn btn-primary btn-xs" onclick='NewPasswordModalBox( event)'
+                                        type="button">Set New
+                                    Password
+                                </button>
+
+                            </div>
+
+
+                            <div class="form-group m-t-15 custom-radio-ml">
+                                <label>Roles</label>
+                                {% for role in roles %}
+                                <div class="radio radio-primary">
+                                    <input id="radio{{role.ID }}" name="RoleID" type="radio" value="{{role.ID }}">
+                                    <label for="radio{{role.ID }}"><span class="digits"> {{role.Title }}</span></label>
+                                </div>
+                                {% endfor %}
+                            </div>
+
+
+                            <div class="card-footer">
+                                <button class="btn btn-sm btn-primary" type="submit"> Save</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+    </div>
+
+
+</form>
+
+
+{% endblock %} {% block jsInline %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+        $("body").on("click", "#ShowPasswordNewClose", function (e) {
+            e.preventDefault();
+            $.magnificPopup.proto.close.call(this);
+        });
+
+        $("body").on("click", "#summitBtn", function (e) {
+            alert(`sdsd`)
+            let frm = $('form#summitBtnFrm');
+            e.preventDefault();
+            $.ajax({
+                type: frm.attr('method'),
+                url: frm.attr('action'),
+                data: frm.serialize(),
+                success: function (data) {
+                    if (data.status == "ok") {
+                        toastrCall("warning", "basarili sadds");
+                    }
+                },
+                error: function (data) {
+                    console.log('An error occurred.');
+                    console.log(data);
+                },
+            });
+        });
+    });
+
+    function genPasswordNew() {
+        var chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        var PasswordNewLength = 8;
+        var PasswordNew = "";
+        for (var i = 0; i <= PasswordNewLength; i++) {
+            var randomNumber = Math.floor(Math.random() * chars.length);
+            PasswordNew += chars.substring(randomNumber, randomNumber + 1);
+        }
+        document.getElementById("PasswordNew").value = PasswordNew;
+    }
+
+    //   <a  id="button" class="btn2" onclick="copyPasswordNew()">Copy</a>
+    // function copyPasswordNew() {
+    //   var copyText = document.getElementById("PasswordNew");
+    //   copyText.select();
+    //   document.execCommand("copy");
+    // }
+
+    function ShowPasswordNew() {
+        var x = document.getElementById("PasswordNew");
+        if (x.type === "PasswordNew") {
+            x.type = "text";
+        } else {
+            x.type = "PasswordNew";
+        }
+    }
+
+    function NewPasswordModalBox(e) {
+        e = e || window.event;
+        e.preventDefault();
+        $.magnificPopup.open({
+            items: {
+                src: "/admin/user/NewPasswordModalBox"
+            },
+            type: 'ajax'
+        })
+    }
+</script>
+
+
+{% endblock %}

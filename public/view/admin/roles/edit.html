@@ -1,0 +1,96 @@
+
+{% extends "../app.html" %} 
+{% block content %} 
+{% set RootName = 'admin-roles' %}
+ {% set routerName = 'admin/roles' %}
+ {% include "../viewComponents/alertMsg.html"%}
+ <form method="POST" action="/{{routerName}}/update" accept-charset="UTF-8" class="form-control1" id="{{RootName}}-store" enctype="multipart/form-data">
+
+<div class="row">
+
+    <div class="col-sm-12 col-xl-6 xl-100">
+        <div class="card">
+          <div class="card-header pb-0">
+            <h5>Tabs Vertical</h5>
+          </div>
+          <div class="card-body">
+
+            <div class="row">
+
+                <input name="_csrf" type="hidden" value="{{ csrf }}">
+                <input name="roleID" type="hidden" value="{{ roleID }}">
+
+                <div class="form-group">
+                  <label for="title">Enter Role Name</label>
+                  <input class="form-control {{err.Title_valid}}" id="Title" name="Title" value="{{roleData.Title}}" type="text" placeholder="Enter Role Name"> 
+                  {% if err.Title_error %}
+                  <div class="invalid-feedback" style="display:block">{{err.Title}}</div>
+                  {% endif %}
+              </div>
+
+              <div class="col-sm-3 col-xs-12">
+                <div  class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    {% for data in datas %}
+                    <a class="nav-link  {% if  forloop.First  %} active {% endif %}" id="v-pills-{{data.ID }}-tab" data-bs-toggle="pill" href="#v-pills-{{data.ID }}" role="tab" aria-controls="v-pills-{{data.ID }}" aria-selected="true">{{data.ModulName }}</a>
+                    {% endfor %}
+                </div>
+              </div>
+
+              <div class="col-sm-9 col-xs-12">
+                <div class="tab-content" id="v-pills-tabContent">
+                    {% for data in datas %}
+                  <div class="tab-pane fade active  {% if  forloop.First  %} show {% endif %}" id="v-pills-{{data.ID }}" role="tabpanel" aria-labelledby="v-pills-{{data.ID }}-tab">
+                      <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Capability</th>
+                          <th >Grant</th>
+                          <th>Deny</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                          {% for per in data.RoleEditList %}
+                              <tr>
+                                <td> {{per.PermissionTitle }} </td>
+                                <td> <input type="checkbox" class="click" {% if per.RolePermissionActive==1  %} checked="checked" {% endif %} id="grant{{per.PermissionID }}" name="grant-caps[]"  value="{{per.PermissionID }}"> </td>
+                                <td><input type="checkbox" class="click" {% if per.RolePermissionActive==0  %} checked="checked" {% endif %} id="deny{{per.PermissionID }}" name="deny-caps[]" value="{{per.PermissionID }}"></td>
+                              </tr>
+                           {% endfor %}
+                      </tbody>
+                      </table>
+                  </div>
+              
+                  {% endfor %}
+                  <input type="submit">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+ </form>
+{% endblock %}
+ {% block jsInline %}
+
+<script>
+$(function(){
+
+$('.click').change(function() {
+
+value=   $(this).attr("value");
+name= $(this).attr("name");
+
+     if (name=="grant-caps[]")
+        $('#deny'+value).prop('checked',false);
+  
+    if (name=="deny-caps[]") 
+        $('#grant'+value).prop('checked',false);
+
+    });
+});
+
+</script>
+
+
+{% endblock %}

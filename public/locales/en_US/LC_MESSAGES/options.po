@@ -1,0 +1,77 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: KurbanBook\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Selman Tunc <selmantunc@gmail.com>\n"
+"Language-Team: \n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.1.1\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+
+msgid "Price Settings"
+msgstr ""
+
+msgid "Sales Unit Price"
+msgstr ""
+
+msgid "Receipt Automatic Order No"
+msgstr ""
+
+msgid "You can change this price once, if you change it later, it will not affect the price of the animals in the groups you previously registered."
+msgstr ""
+
+msgid "Sales Unit Price"
+msgstr ""
+
+msgid "Festival Of Sacrifices"
+msgstr ""
+
+msgid "Number of Shareholders"
+msgstr ""
+
+msgid "Purchase Unit Price"
+msgstr ""
+
+msgid "Cache Settings"
+msgstr ""
+
+msgid "Cache"
+msgstr ""
+
+msgid "Open"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "Clear All Cache"
+msgstr ""
+
+msgid "Note: After clearing, the cache will run slow on first run, then very fast."
+msgstr ""
+
+msgid "Auto Sequence Number"
+msgstr "ı"
+
+msgid "WhatsApp Message"
+msgstr ""
+
+msgid "usable abbreviation"
+msgstr ""
+
+msgid "WhatsApp Map Message"
+msgstr ""
+
+msgid "Whatsapp Additional Message"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""

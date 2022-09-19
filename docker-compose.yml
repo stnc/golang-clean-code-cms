@@ -1,0 +1,110 @@
+version: '3.5'
+services:
+# http://mysqltopgsql.com/post/unicode/   https://ahmetimamoglu.com.tr/postgresql-turkce-karakter-hatasinin-cozumleri
+# https://towardsdatascience.com/how-to-run-postgresql-using-docker-15bf87b452d4
+# https://levelup.gitconnected.com/creating-and-filling-a-postgres-db-with-docker-compose-e1607f6f882f   ıcınde create tanble ornegi var 
+
+# docker-compose up -d --build
+# echo "host all all all $POSTGRES_HOST_AUTH_METHOD" >> pg_hba.conf
+# apk update
+# apk add nano
+# redis-cli 
+# CONFIG SET requirepass MDNcVb924a
+
+
+  # App Service
+ #  golang:
+    # Configuration for building the docker image for the service
+  #   build:
+  #     context: ./ # Use an image built from the specified dockerfile in the current directory.
+ #      dockerfile: Dockerfile
+ #    container_name: krbn
+ #    volumes:
+  #     - "D:/docker/go2:/app"
+  #   ports:
+ #     - "8080:8080" # Forward the exposed port 8080 on the container to port 8080 on the host machine
+ #    restart: unless-stopped
+  #   depends_on: 
+  #     - redis # This service depends on redis. Start that first.
+  #     - postgres # This service depends on redis. Start that first.
+  #   environment: # Pass environment variables to the service
+  #     REDIS_URL: redis:6379    
+  #   networks: # Networks to join (Services on the same network can communicate with each other using their name)
+   #    - backend
+  postgres:
+    container_name: postgres_container
+    image: postgres:14.1
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      POSTGRES_INITDB_ARGS: '--encoding=UTF-8 --lc-collate=C --lc-ctype=C'
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+      PGDATA: /data/postgres
+
+    volumes:
+       - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - backend
+    restart: unless-stopped
+  
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      
+    volumes:
+       - pgadmin:/var/lib/pgadmin
+
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    networks:
+      - backend
+    restart: unless-stopped
+
+  # # Redis Service   
+  redis:
+    image: redis:6.2-alpine
+    restart: unless-stopped
+    container_name: redis
+    ports:
+      - "6379:6379"
+    command: redis-server --save 60 1 --requirepass MDNcVb924a --loglevel warning
+
+
+
+  redis-commander:
+    container_name: redis-commander
+    hostname: redis-commander
+    image: rediscommander/redis-commander:latest
+    environment:
+    - REDIS_HOST=redis
+    - REDIS_PASSWORD=MDNcVb924a
+    ports:
+      - "127.0.0.1:8081:8081"
+    depends_on:
+      - redis
+    restart:
+      unless-stopped
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    container_name: adminer
+    networks:
+      - backend    
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+    postgres:
+    pgadmin:
+    golang:

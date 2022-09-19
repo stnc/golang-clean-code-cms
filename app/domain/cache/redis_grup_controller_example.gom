@@ -1,0 +1,100 @@
+
+// func GrupDataGenerateV1(services *Gruplar, year string) []dto.GruplarExcelandIndex {
+func GrupDataGenerateV1(services *Gruplar, year string) *JsonResponse {
+	// db := repository.DB
+	// HayvanBilgisiApp := repository.HayvanBilgisiRepositoryInit(db)
+	// kisiApp := repository.KisilerRepositoryInit(db)
+	// GruplarApp := repository.GruplarRepositoryInit(db)
+	//redisClient := cache.RedisDBInit()
+
+	redisClient := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "MDNcVb924a",
+		DB:       0,
+	})
+	key := "products" + year
+	cachedProducts, err := redisClient.Get(key).Bytes()
+
+	response := JsonResponse{}
+
+	// var veriler []dto.GruplarExcelandIndex
+	veriler := []dto.GruplarExcelandIndex{}
+	if err != nil {
+
+		veriler, _ = services.GruplarApp.GetByAllRelations(year)
+		for num, v := range veriler {
+			fmt.Println(services.HayvanBilgisiApp.GetTrophyNumber(v.HayvanBilgisiID))
+			veriler[num].KupeNo = services.HayvanBilgisiApp.GetTrophyNumber(v.HayvanBilgisiID)
+			fmt.Println("fiyat")
+			fmt.Printf("%+v\n", v.ToplamKurbanFiyati)
+			if v.ToplamKurbanFiyati == 1 {
+				veriler[num].ToplamKurbanFiyati = 0
+			} else {
+				veriler[num].ToplamKurbanFiyati = v.ToplamKurbanFiyati
+			}
+			if v.AgirlikTipi == 1 {
+				veriler[num].GrupIsoTopeName = "kucuk"
+				veriler[num].GrupIsoTopeTRname = "Küçük"
+				veriler[num].GrupIsoTopeAlert = "danger"
+			} else if v.AgirlikTipi == 2 {
+				veriler[num].GrupIsoTopeName = "orta"
+				veriler[num].GrupIsoTopeTRname = "Orta"
+				veriler[num].GrupIsoTopeAlert = "warning"
+			} else if v.AgirlikTipi == 3 {
+				veriler[num].GrupIsoTopeName = "buyuk"
+				veriler[num].GrupIsoTopeTRname = "Büyük"
+				veriler[num].GrupIsoTopeAlert = "success"
+			}
+
+			veriler[num].ToplamOdemeler = services.GruplarApp.GetGrupIDTotalPayment(v.ID)
+			veriler[num].KalanBorclar = services.GruplarApp.GrupKalanBorclar(v.ID)
+			veriler[num].KasaBorcu = services.GruplarApp.KasaBorcu(v.ID)
+
+			var kisilerList = []dto.KurbanListForGrouplar{}
+			kisilerList, _ = services.KurbanApp.GetAllKurbanAndKisiler(int(v.ID))
+			// fmt.Printf("%+v\n", kisilerList)
+			for no, kisi := range kisilerList {
+				if kisi.RefKisiID != 0 {
+					referansKisi, _ := services.kisiApp.GetByID(kisi.RefKisiID)
+					kisilerList[no].ReferansID = referansKisi.ID
+					kisilerList[no].ReferansAdSoyad = referansKisi.AdSoyad
+					kisilerList[no].ReferansTelefon = referansKisi.Telefon
+				}
+			}
+			veriler[num].KurbanKisiList = kisilerList
+			// var post = entity.Post{}
+			// var kurbandataKisi *entity.Kisiler
+			kisiBasiDusenFiyatAraHesaplamaKusuratli := v.ToplamKurbanFiyati / float64(veriler[num].HissedarAdet)
+			kisiBasiDusenFiyat := stnccollection.RoundNumber(math.Ceil(stnccollection.ToFixedDecimal(kisiBasiDusenFiyatAraHesaplamaKusuratli, 2)))
+			veriler[num].KisiBasiDusenHisseFiyati = kisiBasiDusenFiyat
+		}
+
+		cachedProducts, err = json.Marshal(veriler)
+
+		if err != nil {
+			fmt.Println("hata baş")
+			log.Fatalf(err.Error())
+
+		}
+		err = redisClient.Set(key, cachedProducts, time.Minute*7200).Err() //7200 5 gun eder
+
+		if err != nil {
+			log.Fatalf(err.Error())
+		}
+
+		response = JsonResponse{Data: veriler, Source: "PostgreSQL"}
+		return &response
+	}
+
+	err = json.Unmarshal(cachedProducts, &veriler)
+
+	if err != nil {
+		fmt.Println("hata son")
+		log.Fatalf(err.Error())
+	}
+
+	response = JsonResponse{Data: veriler, Source: "Redis Cache"}
+
+	return &response
+	// return veriler
+}

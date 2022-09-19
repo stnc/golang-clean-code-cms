@@ -1,0 +1,74 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: KurbanBook\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Selman Tunc <selmantunc@gmail.com>\n"
+"Language-Team: \n"
+"Language: tr_TR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.1.1\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+
+msgid "Price Settings"
+msgstr "Fiyat Ayarları"
+
+msgid "Sales Unit Price"
+msgstr "Satış Birim Fiyatı"
+
+msgid "Receipt Automatic Order No"
+msgstr "Makbuz Otomatik Sira No"
+
+msgid "You can change this price once, if you change it later, it will not affect the price of the animals in the groups you previously registered."
+msgstr "Bu fiyatı bir kez değiştirebilirsiniz, daha sonra değiştirirseniz daha önce kayıt olduğunuz gruplardaki hayvanların fiyatını etkilemez."
+
+msgid "Festival Of Sacrifices"
+msgstr "Kurban Bayrami Yili"
+
+msgid "Number of Shareholders"
+msgstr "Hissedar Sayısı"
+
+msgid "Purchase Unit Price"
+msgstr "Alis Birim Fiyatı"
+
+msgid "Cache Settings"
+msgstr "Onbellek Ayarlari"
+
+msgid "Cache"
+msgstr "Onbellek"
+
+msgid "Open"
+msgstr "Acik"
+
+msgid "Close"
+msgstr "Kapali"
+
+msgid "Clear All Cache"
+msgstr "Tüm Onbellegi Temizle"
+
+msgid "Note: After clearing, the cache will run slow on first run, then very fast."
+msgstr "Not: temizledikden sonra ilk çalışmada cache yavaş çalışır sonra çok hızlı çalışacaktır."
+
+msgid "Auto Sequence Number"
+msgstr "Otomatik Sıra Numarası"
+
+msgid "WhatsApp Message"
+msgstr "WhatsApp Mesajı"
+
+msgid "usable abbreviation"
+msgstr "kullanılabilir kısaltma"
+
+msgid "WhatsApp Map Message"
+msgstr "WhatsApp Harita Mesajı"
+
+msgid "Whatsapp Additional Message"
+msgstr "Whatsapp Ek Mesaj"
+
+msgid "Save"
+msgstr "Kaydet"
+
+msgid "Cancel"
+msgstr "Iptal"

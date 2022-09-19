@@ -1,0 +1,58 @@
+<!--begin::Dropzone-->
+
+<div class="dropzone dropzone-primary dz-clickable dz-started dropzone dropzone-queue mb-2" id="kt_dropzonejs_example_2">
+  <!--begin::Controls-->
+  <div class="dropzone-panel mb-lg-0 mb-2">
+    <h6>bu alana sürekle bırak ile de resim atılabilir</h6>
+    <a class="dropzone-select btn btn-sm btn-primary">Dosya Ekle</a>
+    <a style="display: none!important;" class="dropzone-upload btn btn-warning">Upload All</a>
+    <a style="display: none!important;" class="dropzone-remove-all btn btn-warning">Remove All</a>
+  </div>
+  <!--end::Controls-->
+  <!--begin::Items-->
+  <div class="dropzone-items wm-200px">
+    <div class="dropzone-item" style="display:none">
+      <!--begin::File-->
+      <div class="dropzone-file">
+        <div class="dropzone-filename" title="some_image_file_name.jpg">
+          <span data-dz-name="">some_image_file_name.jpg</span>
+          <strong>(
+            <span data-dz-size="">340kb</span>)</strong>
+        </div>
+        <div class="dropzone-error" data-dz-errormessage=""></div>
+      </div>
+      <!--end::File-->
+      <!--begin::Progress-->
+      <div class="dropzone-progress">
+        <div class="progress">
+          <div class="progress-bar bg-primary" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-dz-uploadprogress=""></div>
+        </div>
+      </div>
+      <!--end::Progress-->
+      <!--begin::Toolbar-->
+      <div class="dropzone-toolbar">
+        <span class="dropzone-start">
+          <i class="bi bi-play-fill fs-3"></i>
+        </span>
+        <span class="dropzone-cancel" data-dz-remove="" style="display: none;">
+          <i class="bi bi-x fs-3"></i>
+        </span>
+        <span class="dropzone-delete" data-dz-remove="">
+          <i class="bi bi-x fs-1"></i>
+        </span>
+      </div>
+      <!--end::Toolbar-->
+    </div>
+  </div>
+  <!--end::Items-->
+</div>
+<!--end::Dropzone-->
+
+
+<style>
+.dz-default.dz-message{    
+display: none!important;
+  }
+
+    
+</style>

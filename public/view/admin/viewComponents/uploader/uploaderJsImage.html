@@ -1,0 +1,88 @@
+
+<script>
+
+
+  $(document).ready(function () {
+    $('.popup-youtube, .popup-vimeo, .popup-gmaps').magnificPopup({
+      disableOn: 700,
+      type: 'iframe',
+      mainClass: 'mfp-fade',
+      removalDelay: 160,
+      preloader: false,
+
+      fixedContentPos: false
+    });
+
+
+    $('.popup-gallery').magnificPopup({
+      delegate: 'a.image',
+      type: 'image',
+      tLoading: 'Loading image #%curr%...',
+      mainClass: 'mfp-img-mobile',
+      gallery: {
+        enabled: true,
+        navigateByImgClick: true,
+        preload: [0, 1] // Will preload 0 - before current, and 1 after the current image
+      },
+      image: {
+        tError: '<a href="%url%">The image #%curr%</a> could not be loaded.',
+        titleSrc: function (item) {
+          return item.el.attr('title') + '<small>STNC</small>';
+        }
+      }
+    });
+
+    $('.stncElemMedia').click(function (e) {
+      e.preventDefault();
+      var id = $(this).data('id');
+
+      ajaxCall(id)
+    });
+
+    function ajaxCall(id) {
+      fetch("/admin/{{ fileConfig.modulName }}/media-delete/" + id, {
+        method: 'GET',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      })
+        .then(response => {
+          if (response.ok) {
+            return response.json()
+          } else {
+            console.log("error")
+          }
+        })
+        .then(data => {
+
+
+          if (data.status) {
+            $(".elemMedia-" + id).remove();
+            toastr.options = {
+              "closeButton": true,
+              "debug": false,
+              "newestOnTop": true,
+              "progressBar": true,
+              "positionClass": "toast-top-center",
+              "preventDuplicates": false,
+              "onclick": null,
+              "showDuration": "300",
+              "hideDuration": "1000",
+              "timeOut": "5000",
+              "extendedTimeOut": "1000",
+              "showEasing": "swing",
+              "hideEasing": "linear",
+              "showMethod": "fadeIn",
+              "hideMethod": "fadeOut"
+            }
+            toastr["success"]("Başarı İle Silindi")
+          }
+
+        })
+        .catch((error) => {
+          console.log("error")
+        });
+    }
+
+
+  });
+
+</script>

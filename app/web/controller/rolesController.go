@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"stncCms/app/domain/dto"
 	"stncCms/app/domain/entity"
+	"stncCms/app/domain/helpers/lang"
 	"stncCms/app/domain/helpers/stnccollection"
 	"stncCms/app/domain/helpers/stncdatetime"
 	"strconv"
@@ -44,6 +45,7 @@ func InitRoles(perApp services.PermissionAppInterface, modApp services.ModulesAp
 // Index list
 func (access *Roles) Index(c *gin.Context) {
 	rbac.RbacCheck(c, "post-index")
+	locale, menuLanguage := lang.LoadLanguages("roles")
 	// stncsession.IsLoggedInRedirect(c)
 	var date stncdatetime.Inow
 	var total int64
@@ -53,11 +55,13 @@ func (access *Roles) Index(c *gin.Context) {
 	offset := paginator.Offset()
 	data, _ := access.roleApp.GetAllPagination(postsPerPage, offset)
 	viewData := pongo2.Context{
-		"paginator": paginator,
-		"title":     "List",
-		"dataList":  data,
-		"date":      date,
-		"csrf":      csrf.GetToken(c),
+		"paginator":   paginator,
+		"title":       "List",
+		"dataList":    data,
+		"date":        date,
+		"csrf":        csrf.GetToken(c),
+		"locale":      locale,
+		"localeMenus": menuLanguage,
 	}
 
 	c.HTML(
@@ -70,6 +74,7 @@ func (access *Roles) Index(c *gin.Context) {
 // Create all list f
 func (access *Roles) Create(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
+	locale, menuLanguage := lang.LoadLanguages("roles")
 	var data []dto.ModulesAndPermission
 	data, _ = access.modulesApp.GetAllModulesMerge()
 	for num, v := range data {
@@ -86,10 +91,12 @@ func (access *Roles) Create(c *gin.Context) {
 	// fmt.Printf("MarshalIndent funnction output\n %s\n", string(empJSON))
 
 	viewData := pongo2.Context{
-		"paginator": paginator,
-		"title":     "permissions",
-		"datas":     data,
-		"csrf":      csrf.GetToken(c),
+		"paginator":   paginator,
+		"title":       "permissions",
+		"datas":       data,
+		"csrf":        csrf.GetToken(c),
+		"locale":      locale,
+		"localeMenus": menuLanguage,
 	}
 
 	c.HTML(
@@ -103,6 +110,7 @@ func (access *Roles) Create(c *gin.Context) {
 // store data
 func (access *Roles) Store(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
+
 	//once bi yere rolu kaydet
 	//sonra kaydeidlern id yi alman lazim
 
@@ -166,8 +174,8 @@ func (access *Roles) Store(c *gin.Context) {
 
 func (access *Roles) Edit(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
+	locale, menuLanguage := lang.LoadLanguages("roles")
 	var data []dto.ModulesAndPermissionRole
-
 	if roleID, err := strconv.Atoi(c.Param("ID")); err == nil {
 		data, _ = access.modulesApp.GetAllModulesMergePermission()
 		roleData, _ := access.roleApp.GetByID(roleID) //TODO: bu veri  access.roleApp.EditList iicne de geliyor orada mi almak mantakli ??
@@ -178,11 +186,13 @@ func (access *Roles) Edit(c *gin.Context) {
 			data[num].RoleEditList = list
 		}
 		viewData := pongo2.Context{
-			"title":    "permissions",
-			"roleData": roleData,
-			"datas":    data,
-			"roleID":   roleID,
-			"csrf":     csrf.GetToken(c),
+			"title":       "permissions",
+			"roleData":    roleData,
+			"datas":       data,
+			"roleID":      roleID,
+			"csrf":        csrf.GetToken(c),
+			"locale":      locale,
+			"localeMenus": menuLanguage,
 		}
 
 		c.HTML(
@@ -196,6 +206,7 @@ func (access *Roles) Edit(c *gin.Context) {
 
 func (access *Roles) Update(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
+
 	roleID := c.PostForm("roleID")
 	roleIDint := stnccollection.StringToint(c.PostForm("roleID"))
 	title := c.PostForm("Title")
@@ -203,15 +214,15 @@ func (access *Roles) Update(c *gin.Context) {
 	access.roleApp.UpdateTitle(roleIDint, title)
 
 	//TODO: neden calismadi
-	// titleSlug := stnchelper.Slugify(title, 15)
-	// access.roleApp.Update(
-	// 	&entity.Role{
-	// 		ID:      roleIDint,
-	// 		Title:   title,
-	// 		Slug:    titleSlug,
-	// 		Context: titleSlug,
-	// 		Status:  1,
-	// 	})
+	//titleSlug := stnchelper.Slugify(title, 15)
+	//access.roleApp.Update(
+	//	&entity.Role{
+	//		ID:      roleIDint,
+	//		Title:   title,
+	//		Slug:    titleSlug,
+	//		Context: titleSlug,
+	//		Status:  1,
+	//	})
 
 	grants, _ := c.Request.PostForm["grant-caps[]"]
 	for _, row := range grants {
@@ -232,15 +243,11 @@ func (access *Roles) Update(c *gin.Context) {
 
 func (access *Roles) Delete(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
-
 	if ID, err := strconv.ParseUint(c.Param("ID"), 10, 64); err == nil {
-
 		access.roleApp.Delete(ID)
 		stncsession.SetFlashMessage("delete", "success", c)
-
 		c.Redirect(http.StatusMovedPermanently, "/"+viewPathPermission)
 		return
-
 	} else {
 		c.AbortWithStatus(http.StatusNotFound)
 	}
@@ -248,10 +255,9 @@ func (access *Roles) Delete(c *gin.Context) {
 
 func (access *Roles) IndexKnockout(c *gin.Context) {
 	// allpermission, err := access.permissionApp.GetAllPaginationermission()
-
 	stncsession.IsLoggedInRedirect(c)
+	locale, menuLanguage := lang.LoadLanguages("roles")
 	var date stncdatetime.Inow
-
 	var data []dto.ModulesAndPermission
 	data, _ = access.modulesApp.GetAllModulesMerge()
 	for num, v := range data {
@@ -259,33 +265,29 @@ func (access *Roles) IndexKnockout(c *gin.Context) {
 		list, _ = access.permissionApp.GetAllPaginationermissionForModulID(int(v.ID))
 		data[num].Permissions = list
 	}
-
 	// //#json formatter #stncjson https://github.com/TylerBrock/colorjson
 	empJSON, err := json.MarshalIndent(data, "", "  ")
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
 	fmt.Printf("MarshalIndent funnction output\n %s\n", string(empJSON))
-
 	// js, _ := json.Marshal(data)
-
 	// fmt.Println((jsonData))
 
 	viewData := pongo2.Context{
-		"paginator": paginator,
-		"title":     "permissions",
-		"datas":     data,
-		"json":      string(empJSON),
-		"date":      date,
-		"csrf":      csrf.GetToken(c),
+		"paginator":   paginator,
+		"title":       "permissions",
+		"datas":       data,
+		"json":        string(empJSON),
+		"date":        date,
+		"csrf":        csrf.GetToken(c),
+		"locale":      locale,
+		"localeMenus": menuLanguage,
 	}
 
 	c.HTML(
-		// Set the HTTP status to 200 (OK)
 		http.StatusOK,
-		// Use the index.html template
 		viewPathPermission+"knockout.html",
-		// Pass the data that the page uses
 		viewData,
 	)
 }

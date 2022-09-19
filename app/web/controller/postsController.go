@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"reflect"
 	"stncCms/app/domain/entity"
+	"stncCms/app/domain/helpers/lang"
 	"stncCms/app/domain/helpers/stnc2upload"
 	stnccollection "stncCms/app/domain/helpers/stnccollection"
 	"stncCms/app/domain/helpers/stncdatetime"
@@ -58,11 +59,11 @@ func InitPost(pApp services.PostAppInterface, catsPostApp services.CatPostAppInt
 func (access *Post) Index(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
 	flashMsg := stncsession.GetFlashMessage(c)
-
+	locale, menuLanguage := lang.LoadLanguages("post")
 	var date stncdatetime.Inow
 	var total int64
 	access.postApp.Count(&total)
-	postsPerPage := 3
+	postsPerPage := 10
 	paginator := pagination.NewPaginator(c.Request, postsPerPage, total)
 	offset := paginator.Offset()
 	posts, _ := access.postApp.GetAllPagination(postsPerPage, offset)
@@ -74,12 +75,14 @@ func (access *Post) Index(c *gin.Context) {
 	//	tarih.FormatTarihForMysql("2020-05-17 05:08:40")
 
 	viewData := pongo2.Context{
-		"paginator": paginator,
-		"title":     "İçerik Ekleme",
-		"flashMsg":  flashMsg,
-		"posts":     posts,
-		"date":      date,
-		"csrf":      csrf.GetToken(c),
+		"paginator":   paginator,
+		"title":       locale.Get("Dashboard"),
+		"flashMsg":    flashMsg,
+		"posts":       posts,
+		"date":        date,
+		"csrf":        csrf.GetToken(c),
+		"locale":      locale,
+		"localeMenus": menuLanguage,
 	}
 
 	c.HTML(
@@ -92,11 +95,16 @@ func (access *Post) Index(c *gin.Context) {
 // Create all list f
 func (access *Post) Create(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
+	locale, menuLanguage := lang.LoadLanguages("post")
+	flashMsg := stncsession.GetFlashMessage(c)
 	cats, _ := access.catApp.GetAll()
 	viewData := pongo2.Context{
-		"title":    "İçerik Ekleme",
-		"catsData": cats,
-		"csrf":     csrf.GetToken(c),
+		"title":       "İçerik Ekleme",
+		"flashMsg":    flashMsg,
+		"catsData":    cats,
+		"csrf":        csrf.GetToken(c),
+		"locale":      locale,
+		"localeMenus": menuLanguage,
 	}
 	c.HTML(
 		// Set the HTTP status to 200 (OK)
@@ -109,6 +117,8 @@ func (access *Post) Create(c *gin.Context) {
 // Store save method
 func (access *Post) Store(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
+	locale, menuLanguage := lang.LoadLanguages("post")
+
 	var post, _, _ = postModel(c)
 	var savePostError = make(map[string]string)
 
@@ -181,12 +191,14 @@ func (access *Post) Store(c *gin.Context) {
 	}
 
 	viewData := pongo2.Context{
-		"title":    "içerik ekleme",
-		"catsPost": catsPost,
-		"catsData": catsData,
-		"csrf":     csrf.GetToken(c),
-		"err":      savePostError,
-		"post":     post,
+		"title":       "içerik ekleme",
+		"catsPost":    catsPost,
+		"catsData":    catsData,
+		"csrf":        csrf.GetToken(c),
+		"err":         savePostError,
+		"post":        post,
+		"locale":      locale,
+		"localeMenus": menuLanguage,
 	}
 	c.HTML(
 		http.StatusOK,
@@ -202,7 +214,7 @@ func (access *Post) Edit(c *gin.Context) {
 	//postID, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	stncsession.IsLoggedInRedirect(c)
 	flashMsg := stncsession.GetFlashMessage(c)
-
+	locale, menuLanguage := lang.LoadLanguages("post")
 	if postID, err := strconv.ParseUint(c.Param("postID"), 10, 64); err == nil {
 		// Check if the article exists
 		var catsPost []string
@@ -227,12 +239,14 @@ func (access *Post) Edit(c *gin.Context) {
 		}
 		if posts, err := access.postApp.GetByID(postID); err == nil {
 			viewData := pongo2.Context{
-				"title":    "içerik ekleme",
-				"catsPost": catsPost,
-				"catsData": catsData,
-				"post":     posts,
-				"csrf":     csrf.GetToken(c),
-				"flashMsg": flashMsg,
+				"title":       "içerik ekleme",
+				"catsPost":    catsPost,
+				"catsData":    catsData,
+				"post":        posts,
+				"csrf":        csrf.GetToken(c),
+				"flashMsg":    flashMsg,
+				"locale":      locale,
+				"localeMenus": menuLanguage,
 			}
 			c.HTML(
 				http.StatusOK,
@@ -252,6 +266,7 @@ func (access *Post) Edit(c *gin.Context) {
 // Update data
 func (access *Post) Update(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
+	locale, menuLanguage := lang.LoadLanguages("post")
 	var post, idN, id = postModel(c)
 
 	var savePostError = make(map[string]string)
@@ -318,12 +333,14 @@ func (access *Post) Update(c *gin.Context) {
 	}
 
 	viewData := pongo2.Context{
-		"title":    "içerik ekleme",
-		"catsPost": catsPostForm,
-		"catsData": catsData,
-		"err":      savePostError,
-		"csrf":     csrf.GetToken(c),
-		"post":     post,
+		"title":       "içerik ekleme",
+		"catsPost":    catsPostForm,
+		"catsData":    catsData,
+		"err":         savePostError,
+		"csrf":        csrf.GetToken(c),
+		"post":        post,
+		"locale":      locale,
+		"localeMenus": menuLanguage,
 	}
 	c.HTML(
 		http.StatusOK,
@@ -335,15 +352,11 @@ func (access *Post) Update(c *gin.Context) {
 // Delete data
 func (access *Post) Delete(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
-
 	if postID, err := strconv.ParseUint(c.Param("postID"), 10, 64); err == nil {
-
 		access.postApp.Delete(postID)
 		stncsession.SetFlashMessage("Success Delete", "success", c)
-
 		c.Redirect(http.StatusMovedPermanently, "/admin/post/"+c.Param("postID"))
 		return
-
 	} else {
 		c.AbortWithStatus(http.StatusNotFound)
 	}

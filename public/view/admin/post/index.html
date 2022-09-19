@@ -13,30 +13,27 @@
                 <table class="table table-responsive-sm table-bordered">
                     <thead>
                         <tr>
-                            <th>Post</th>
-                            <th>Date registered</th>  
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>{{locale.Get("Post")}}</th>
+                            <th>{{locale.Get("Date registered")}}</th>
+                            <th>{{locale.Get("Status")}}</th>
+                            <th>{{locale.Get("Action")}}</th>
 
                         </tr>
                     </thead>
                     <tbody>
-
-
                         {% for post in posts %}
-
                         <tr>
                             <td>{{post.PostTitle|title|truncatechars:35 }}</td>
                             <td>  {{date.OnlyDate(post.CreatedAt.String())}}</td>
                             <td><span class="badge badge-success">
                                 {% if post.PostStatus %}
-                                  Open
+                             {{locale.Get("Open")}}
                                   {% else  %}
-                                  Close 
+                              {{locale.Get("Close")}}
                                {% endif  %} 
                             </span></td>
-                            <td> <a class="btn btn-block btn-warning" href="/admin/post/edit/{{post.ID}}">Edit</a>
-                                <a class="btn btn-block btn-danger" href="/admin/post/delete/{{post.ID}}">Delete</a> 
+                            <td> <a class="btn btn-block btn-warning" href="/admin/post/edit/{{post.ID}}">{{locale.Get("Edit")}}</a>
+                                <a class="btn btn-block btn-danger" href="/admin/post/delete/{{post.ID}}">{{locale.Get("Delete")}}</a>
                             </td>
                         </tr>
 
@@ -50,13 +47,13 @@
                     <ul class="pagination">
                         {%if paginator.HasPrev() %}
                         <li class="page-item">
-                            <a class="page-link" href="{{paginator.PageLinkFirst()}}">First</a>
+                            <a class="page-link" href="{{paginator.PageLinkFirst()}}">{{locale.Get("First")}}</a>
                         </li>
                         <li class="page-item">
                             <a class="page-link" href="{{paginator.PageLinkPrev()}}">&lt;</a>
                         </li>
                         {% else %}
-                        <li class="page-item disabled"><a class="page-link"> First</a></li>
+                        <li class="page-item disabled"><a class="page-link"> {{locale.Get("First")}}</a></li>
                         <li class="page-item disabled"><a class="page-link">&lt;</a></li>
                         {% endif %} {% for page in paginator.Pages%}
 
@@ -66,10 +63,10 @@
 
                         {% endfor %} {% if paginator.HasNext %}
                         <li class="page-item"><a class="page-link" href="{{paginator.PageLinkNext()}}">&gt; </a></li>
-                        <li class="page-item"><a class="page-link" href="{{paginator.PageLinkLast()}}">Last </a></li>
+                        <li class="page-item"><a class="page-link" href="{{paginator.PageLinkLast()}}">{{locale.Get("Last")}} </a></li>
                         {% else %}
                         <li class="disabled page-item"><a class="page-link">&gt;</a></li>
-                        <li class="disabled page-item"><a class="page-link">Last</a></li>
+                        <li class="disabled page-item"><a class="page-link">{{locale.Get("Last")}}</a></li>
                         {%endif%}
                     </ul>
                     {%endif%}

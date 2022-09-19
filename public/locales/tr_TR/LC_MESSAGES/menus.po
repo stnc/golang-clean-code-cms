@@ -19,5 +19,23 @@
 msgid "Post"
 msgstr "Sayfalar"
 
-msgid "Has the payment been received?"
-msgstr "Ödeme Alındı mı?"
+msgid "Post Create"
+msgstr "Sayfa Olustur"
+
+msgid "Setting"
+msgstr "Ayarlar"
+
+msgid "Roles"
+msgstr "Roller"
+
+msgid "New Roles"
+msgstr "Yeni Rol"
+
+msgid "Users"
+msgstr "Kullanicilar"
+
+msgid "Logout"
+msgstr "Cikis"
+
+msgid "Menu"
+msgstr "Menu"

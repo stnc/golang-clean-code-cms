@@ -10,30 +10,34 @@
 <form method="POST" action="/{{routerName}}/update" accept-charset="UTF-8"   enctype="multipart/form-data">
     <input name="_csrf" type="hidden" value="{{ csrf }}">
     <input name="_method" type="hidden" value="PUT">
+    <input class="form-control {{err.ID}}" id="ID" name="ID" value="{{post.ID}}" type="hidden">
 
     <div class="row">
         <div class="col-md-9">
             <div class="card">
-                <div class="card-header">
-                    <strong>{% if title %} {{ title }} - Microblog {% else %} Welcome to Microblog
-                                {% endif %}</strong>
-                    <small>Form</small>
-                </div>
+<!--                <div class="card-header">-->
+<!--                    <strong>{% if title %} {{ title }} - Microblog {% else %} Welcome to Microblog-->
+<!--                                {% endif %}</strong>-->
+<!--                    <small>Form</small>-->
+<!--                </div>-->
 
                 <div class="card-body">
 
                     <div class="form-group">
-                        <label for="PostTitle">İçerik Başlığı</label>
-                        <input class="form-control {{err.PostTitle_valid}}" id="PostTitle" name="PostTitle" value="{{post.PostTitle}}" type="text" placeholder="Site Başlığı"> {% if err.PostTitle_error %}
+                        <label for="PostTitle">{{locale.Get("Title")}}</label>
+                        <input class="form-control {{err.PostTitle_valid}}" id="PostTitle" name="PostTitle" value="{{post.PostTitle}}" type="text">
+                        {% if err.PostTitle_error %}
                         <div class="invalid-feedback" style="display:block">{{err.PostTitle}}</div>
                         {% endif %}
                     </div>
 
                     <div class="form-group">
-                        <label> Açıklama :</label> {% if err.PostContent_error %}
+                        <label>{{locale.Get("Content")}}</label>
+                        {% if err.PostContent_error %}
                         <div class="invalid-feedback" style="display:block">{{err.PostContent}}</div>
                         {% endif %}
-                        <textarea id="PostContent" name="PostContent" class="form-control">{{post.PostContent}}</textarea> {% if err.PostContent_error %}
+                        <textarea id="PostContent" name="PostContent" class="form-control">{{post.PostContent}}</textarea>
+                        {% if err.PostContent_error %}
                         <div class="invalid-feedback" style="display:block">{{err.PostContent}}</div>
                         {% endif %}
 
@@ -47,13 +51,14 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <strong>Kısa açıklama</strong>
+                            <strong>{{locale.Get("Excerpts")}}</strong>
                         </div>
 
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="PostExcerpt">Kısa açıklama <span> *başlık metinlerde olan </span> </label>
-                                <textarea class="form-control {{err.PostExcerpt_valid}}" id="PostExcerpt" name="PostExcerpt" rows="9" placeholder="Kısa Açıklama...">{{ post.PostExcerpt }}</textarea>
+                                <label for="PostExcerpt"><small>{{locale.Get("Excerpts are optional hand-crafted summaries of your content")}}</small> </label>
+
+                                <textarea class="form-control {{err.PostExcerpt_valid}}" id="PostExcerpt" name="PostExcerpt" rows="9">{{ post.PostExcerpt }}</textarea>
                             </div>
 
                         </div>
@@ -65,19 +70,18 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <strong>Kategori Bilgileri</strong>
+                            <strong>{{locale.Get("Category")}}</strong>
                         </div>
 
                         <div class="card-body">
                             <div class="form-group">
-                                <label> Seçiniz (mecburi değildir)</label>
+                                <label>{{locale.Get("Select (optional)")}}</label>
                                 <div>
                                     {% for cat in catsData%}
                                     <div class="form-check checkbox">
                                         <input class="form-check-input" id="catr-{{ cat.ID }}" {%if cat.ID==cat.SelectedID %} checked {% endif %} name="cats" type="checkbox" value="{{ cat.ID }}">
                                         <label class="form-check-label" for="catr-{{ cat.ID }}">{{ cat.Name|title }}</label>
                                     </div>
-
                                     {% endfor %}
                                 </div>
                             </div>
@@ -86,19 +90,28 @@
                     </div>
                 </div>
 
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong>{{locale.Get("Language Select")}}</strong>
+                        </div>
 
-           
-
-
-        
-           
-   
-
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="languageSelect">{{locale.Get("Language Select")}}</label>
+                                <select class="form-control" name="languageSelect" id="languageSelect">
+                                    <option value="tr">Türkçe</option>
+                                    <option value="en">İngilizce</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <strong>Resim Bilgileri</strong>
+                            <strong>{{locale.Get("Photo Information")}}</strong>
                         </div>
 
                         <div class="card-body">
@@ -111,7 +124,7 @@
                             {% endif %} {% if post.Picture %}
                             <div class="col-md-4">
                                 <div id="alanOnizleme">
-                                    <h5 class="text-center">Seçtiğiniz resim:</h5>
+                                    <h5 class="text-center">{{locale.Get("Selected Photo")}}</h5>
                                     <img id="resimOnizleme" src="/upload/{{post.Picture}}" class="w-100" style="height:10rem!important;" />
                                 </div>
                             </div>
@@ -119,17 +132,17 @@
 
                   
                             <div class="form-group">
-                                <label for="exampleInputFile">Resim</label>
+                                <label>{{locale.Get("Photo")}}</label>
 
                                 <div class="input-group ">
                                     <div class="custom-file ">
-                                        <input type="hidden"  name="picture2" value="{{post.Picture}}" id="Picture">
-                                        <input type="file" multiple class="custom-file-input- form-control {{err.picture_valid}}" name="picture"  id="Picture">
-                                        <label class="custom-file-label" for="Picture"></label>
+                                        <input type="hidden"  name="picture2" value="{{post.Picture}}" id="Picture1">
+                                        <input type="file" multiple class="custom-file-input- form-control {{err.picture_valid}}" name="picture"  id="Picture2">
+                                        <label class="custom-file-label" for="Picture1"></label>
                                     </div>
 
                                     <div class="input-group-append">
-                                        <span class="input-group-text" id="">Resim Seç</span>
+                                        <span class="input-group-text" id="">{{locale.Get("Photo Information")}}</span>
                                     </div>
 
                                     {% if err.picture_error %}
@@ -141,10 +154,8 @@
                         </div>
 
                         <div class="card-footer">
-                            <input class="form-control {{err.ID}}" id="ID" name="ID" value="{{post.ID}}" type="hidden">
-
-                            <button class="btn btn-sm btn-primary" type="submit"> Kaydet</button>
-                            <button class="btn btn-sm btn-danger" type="reset"> VAZGEÇ</button>
+                            <button class="btn btn-sm btn-primary" type="submit"> {{locale.Get("Save")}}</button>
+                            <button class="btn btn-sm btn-danger" type="reset"> {{locale.Get("Cancel")}}</button>
                         </div>
                     </div>
                 </div>

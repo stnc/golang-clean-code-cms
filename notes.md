@@ -9,7 +9,7 @@ https://www.bootdey.com/snippets/view/notification-list
 # json notes -- htmlescape
 https://stackoverflow.com/questions/57086035/go-template-htmlescape-json-data-and-it-show-34-issue
 https://github.com/flosch/pongo2/issues/129
-
+https://github.com/TylerBrock/colorjson
 
 https://github.com/denisbakhtin/ginblog/blob/master/main.go burada memstore kullanımı var ona bakılablir
 

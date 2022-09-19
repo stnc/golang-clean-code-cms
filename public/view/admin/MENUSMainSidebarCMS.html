@@ -35,26 +35,17 @@
                         </div>
                     </li>
                     <!-- buradaki dropdown options a eklensin  -->
-                    <li class="dropdown---sil"><a class="nav-link menu-title" href="javascript:void(0)"><i data-feather="home"></i><span>Menu</span></a>
+                    <li class="dropdown---sil"><a class="nav-link menu-title" href="javascript:void(0)"><i data-feather="home"></i><span>{{lang.Get("Menu")}}</span></a>
                         <ul class="nav-submenu menu-content">
-
-
-                           
                             <li>   <a href="/admin/post">   {{lang.Get("Post")}}  </a></li>
-                            <li>   <a href="/admin/post/create">   Create </a></li>
-    
-                            <li><a href="/admin/options">Ayarlar </a></li>
-                            <li><a href="/admin/roles">Roller </a></li>
-                            <li><a href="/admin/roles/create">New Role </a></li>
-                            <li><a href="/admin/user">Kullanıcılar </a></li>
-                            <li><a href="/logout">Çıkış </a></li>
-
-
+                            <li>   <a href="/admin/post/create">   {{lang.Get("Post Create")}} </a></li>
+                            <li><a href="/admin/roles">{{lang.Get("Roles")}}</a></li>
+                            <li><a href="/admin/roles/create">{{lang.Get("New Roles")}} </a></li>
+                            <li><a href="/admin/user">{{lang.Get("Users")}} </a></li>
+                            <li><a href="/admin/options"> {{lang.Get("Setting")}} </a></li>
+                            <li><a href="/logout">{{lang.Get("Logout")}} </a></li>
                         </ul>
                     </li>
-
-
-     
                 </ul>
             </div>
             <div class="right-arrow" id="right-arrow"><i data-feather="arrow-right"></i></div>

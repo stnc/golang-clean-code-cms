@@ -24,11 +24,10 @@
                 <table class="table table-responsive-sm table-bordered">
                     <thead>
                         <tr>
-                            <th>Title</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-
+                            <th>{{locale.Get("Username")}}</th>
+                            <th> {{locale.Get("Date")}}</th>
+                            <th> {{locale.Get("Status")}}</th>
+                            <th> {{locale.Get("Actions")}}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -41,7 +40,7 @@
                             <td> {{tarih.OnlyDate(data.CreatedAt.String())}}</td>
                             <td><span class="badge badge-success">
                                      {% if data.Status==0 %}
-                              Unpublished
+                                    Unpublished
                                 {% elif  data.Status==1 %}
                                    Yayında
                                 {% elif  data.Status==3 %}
@@ -56,19 +55,10 @@
 
 
 
-                                <a class="btn btn-warning" href="/admin/user/edit/{{data.ID}}">Düzenle</a>
+                                <a class="btn btn-warning" href="/admin/user/edit/{{data.ID}}">{{locale.Get("Edit")}}</a>
                                 <div class="btn-group btn-block-">
-                                    <button class="btn btn-primary dropdown-toggle btn-block-" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Olaylar</button>
-                                    <div class="dropdown-menu" x-placement="bottom-start" style="will-change: transform; margin: 0px;">
-                                        <a class="dropdown-item" href="/admin/user/edit/{{data.ID}}">Düzenle</a> {% if data.Status==1 %}
-                                        <a class="dropdown-item" href="/admin/user/status/{{data.ID}}?status=0">Yayından Kaldır</a> {% else %}
-                                        <a class="dropdown-item" href="/admin/user/status/{{data.ID}}?status=1">Yayınla</a> {% endif %}
+             <button class="btn btn-primary dropdown-toggle btn-block-" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{locale.Get("Actions")}}</button>
 
-                                        <a class="dropdown-item" href="/admin/user/status/{{data.ID}}?status=2">Taslak durumuna getir</a>
-                                        <a class="dropdown-item" href="/admin/user/status/{{data.ID}}?status=3">Arşive Kaldır</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="/admin/user/delete/{{data.ID}}">Sil</a>
-                                    </div>
                                 </div>
 
                             </td>
@@ -84,13 +74,13 @@
                     <ul class="pagination">
                         {%if paginator.HasPrev() %}
                         <li class="page-item">
-                            <a class="page-link" href="{{paginator.PageLinkFirst()}}">İlk</a>
+                            <a class="page-link" href="{{paginator.PageLinkFirst()}}">{{locale.Get("First")}}</a>
                         </li>
                         <li class="page-item">
                             <a class="page-link" href="{{paginator.PageLinkPrev()}}">&lt;</a>
                         </li>
                         {% else %}
-                        <li class="page-item disabled"><a class="page-link"> İlk</a></li>
+                        <li class="page-item disabled"><a class="page-link"> {{locale.Get("First")}}</a></li>
                         <li class="page-item disabled"><a class="page-link">&lt;</a></li>
                         {% endif %} {% for page in paginator.Pages%}
 
@@ -100,10 +90,10 @@
 
                         {% endfor %} {% if paginator.HasNext %}
                         <li class="page-item"><a class="page-link" href="{{paginator.PageLinkNext()}}">&gt; </a></li>
-                        <li class="page-item"><a class="page-link" href="{{paginator.PageLinkLast()}}">Son </a></li>
+                        <li class="page-item"><a class="page-link" href="{{paginator.PageLinkLast()}}">{{locale.Get("Last")}} </a></li>
                         {% else %}
                         <li class="disabled page-item"><a class="page-link">&gt;</a></li>
-                        <li class="disabled page-item"><a class="page-link">Son</a></li>
+                        <li class="disabled page-item"><a class="page-link">{{locale.Get("Last")}}</a></li>
                         {%endif%}
                     </ul>
                     {%endif%}

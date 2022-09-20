@@ -49,3 +49,60 @@ msgstr ""
 msgid "Username or password is incorrect"
 msgstr ""
 
+msgid "Create a brand new user and add them to this site."
+msgstr ""
+
+msgid "Username"
+msgstr "Kullanici adi"
+
+msgid "Phone"
+msgstr "Telefon"
+
+msgid "First Name"
+msgstr "Adiniz"
+
+
+msgid "Lastname"
+msgstr "Soyadiniz"
+
+msgid "Password"
+msgstr "Sifreniz"
+
+msgid "Roles"
+msgstr "Roller"
+
+msgid "Save"
+msgstr "Kaydet"
+
+msgid "More information"
+msgstr "daha fazla bilgi"
+
+msgid "Set New Password "
+msgstr "Yeni sifre ayarla"
+
+msgid "Date"
+msgstr "Tarih"
+
+msgid "Status"
+msgstr "Durum"
+
+msgid "Actions"
+msgstr "Olaylar"
+
+msgid "First"
+msgstr "Ilk sayfa"
+
+msgid "Last"
+msgstr "Son sayfa"
+
+msgid "Open"
+msgstr "Acik"
+
+msgid "Close"
+msgstr "Kapali"
+
+msgid "Edit"
+msgstr "Duzenle"
+
+msgid "Delete"
+msgstr "Sil"

@@ -43,9 +43,76 @@ msgstr ""
 msgid "Sign in"
 msgstr ""
 
+
+
 msgid "Don't have account?"
 msgstr ""
 
 msgid "Username or password is incorrect"
 msgstr ""
 
+msgid "Create a brand new user and add them to this site."
+msgstr ""
+
+
+
+msgid "Username"
+msgstr ""
+
+msgid "Phone"
+msgstr ""
+
+msgid "First Name"
+msgstr ""
+
+
+msgid "Lastname"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Roles"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "More information"
+msgstr ""
+
+msgid "Set New Password "
+msgstr ""
+
+
+msgid "Date"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+
+msgid "Actions"
+msgstr ""
+
+
+msgid "First"
+msgstr ""
+
+msgid "Last"
+msgstr ""
+
+msgid "Open"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Delete"
+msgstr ""

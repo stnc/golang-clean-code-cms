@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"stncCms/app/domain/helpers/lang"
 	"stncCms/app/domain/helpers/stnccollection"
 	"stncCms/app/infrastructure/security"
 
@@ -47,6 +48,7 @@ func (access *UserControl) Index(c *gin.Context) {
 	// alluserControl, err := access.userControlApp.GetAlluserControl()
 
 	stncsession.IsLoggedInRedirect(c)
+	locale, menuLanguage := lang.LoadLanguages("user")
 	flashMsg := stncsession.GetFlashMessage(c)
 
 	var tarih stncdatetime.Inow
@@ -66,12 +68,14 @@ func (access *UserControl) Index(c *gin.Context) {
 	//	tarih.FormatTarihForMysql("2020-05-17 05:08:40")
 
 	viewData := pongo2.Context{
-		"paginator": paginator,
-		"title":     "İçerik Ekleme",
-		"allData":   userControls,
-		"tarih":     tarih,
-		"flashMsg":  flashMsg,
-		"csrf":      csrf.GetToken(c),
+		"paginator":   paginator,
+		"title":       "İçerik Ekleme",
+		"allData":     userControls,
+		"tarih":       tarih,
+		"flashMsg":    flashMsg,
+		"csrf":        csrf.GetToken(c),
+		"locale":      locale,
+		"localeMenus": menuLanguage,
 	}
 
 	c.HTML(
@@ -87,16 +91,19 @@ func (access *UserControl) Index(c *gin.Context) {
 // Create all list f
 func (access *UserControl) Create(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
+	locale, menuLanguage := lang.LoadLanguages("user")
 	flashMsg := stncsession.GetFlashMessage(c)
 	cats, _ := access.Branch.GetAll()
 	roles, _ := access.RoleApp.GetAll()
 
 	viewData := pongo2.Context{
-		"title":    "İçerik Ekleme",
-		"catsData": cats,
-		"roles":    roles,
-		"flashMsg": flashMsg,
-		"csrf":     csrf.GetToken(c),
+		"title":       "İçerik Ekleme",
+		"catsData":    cats,
+		"roles":       roles,
+		"flashMsg":    flashMsg,
+		"csrf":        csrf.GetToken(c),
+		"locale":      locale,
+		"localeMenus": menuLanguage,
 	}
 	c.HTML(
 		// Set the HTTP status to 200 (OK)
@@ -111,6 +118,7 @@ func (access *UserControl) Create(c *gin.Context) {
 // Store save method
 func (access *UserControl) Store(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
+	locale, menuLanguage := lang.LoadLanguages("user")
 	flashMsg := stncsession.GetFlashMessage(c)
 	roles, _ := access.RoleApp.GetAll()
 	var userSave = userModel(c)
@@ -130,12 +138,14 @@ func (access *UserControl) Store(c *gin.Context) {
 		stncsession.SetFlashMessage("Zorunlu alanları lütfen doldurunuz", "danger", c)
 	}
 	viewData := pongo2.Context{
-		"title":    "content add",
-		"csrf":     csrf.GetToken(c),
-		"err":      userSavePostError,
-		"data":     userSave,
-		"flashMsg": flashMsg,
-		"roles":    roles,
+		"title":       "content add",
+		"csrf":        csrf.GetToken(c),
+		"err":         userSavePostError,
+		"data":        userSave,
+		"flashMsg":    flashMsg,
+		"roles":       roles,
+		"locale":      locale,
+		"localeMenus": menuLanguage,
 	}
 	c.HTML(
 		http.StatusOK,
@@ -148,14 +158,17 @@ func (access *UserControl) Store(c *gin.Context) {
 // Edit edit data
 func (access *UserControl) Edit(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
+	locale, menuLanguage := lang.LoadLanguages("user")
 	flashMsg := stncsession.GetFlashMessage(c)
 	if userID, err := strconv.ParseUint(c.Param("UserID"), 10, 64); err == nil {
 		if userControls, err := access.UserControlApp.GetByID(userID); err == nil {
 			viewData := pongo2.Context{
-				"title":    "kullanıcı düzenleme",
-				"data":     userControls,
-				"csrf":     csrf.GetToken(c),
-				"flashMsg": flashMsg,
+				"title":       "kullanıcı düzenleme",
+				"data":        userControls,
+				"csrf":        csrf.GetToken(c),
+				"flashMsg":    flashMsg,
+				"locale":      locale,
+				"localeMenus": menuLanguage,
 			}
 			c.HTML(
 				http.StatusOK,
@@ -222,6 +235,7 @@ func (access *UserControl) NewPasswordModalBox(c *gin.Context) {
 // referansEkleAjax save method
 func (access *UserControl) NewPasswordCreateModalBox(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
+	locale, _ := lang.LoadLanguages("user")
 	//var KurbanID uint64
 	//var kalanKurbanFiyati float64
 	//KurbanID, _ = strconv.ParseUint(c.PostForm("kurbanID"), 10, 64)
@@ -238,6 +252,7 @@ func (access *UserControl) NewPasswordCreateModalBox(c *gin.Context) {
 		"status": "err",
 		"err":    "fk", // sahte veri girişi TODO: bunun loglanması lazım
 		"errMsg": "beklenmeyen bir hata oluştu",
+		"locale": locale,
 	}
 	c.JSON(http.StatusOK, viewData)
 	//} else {
@@ -279,6 +294,5 @@ func userModel(c *gin.Context) (user entity.Users) {
 	sifre := security.PassGenerate(pass)
 	user.Password = sifre
 	user.RoleID = stnccollection.StringToint(c.PostForm("RoleID"))
-
 	return user
 }

@@ -26,8 +26,9 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <strong> Add New User </strong>
-                            <small> Create a brand new user and add them to this site. </small>
+
+                            <strong> Add New User {{locale.Get("Create a brand new user and add them to this site.")}}</strong>
+
                         </div>
                         <div class="card-body">
 
@@ -35,7 +36,7 @@
                                 <div class="col-md-6">
 
                                     <div class="form-group">
-                                        <label for="UserNameNew"> Username</label>
+                                        <label for="UserNameNew">  {{locale.Get("Username")}}</label>
                                         <input class="form-control {{err.UserName_valid}}" id="UserNameNew"
                                                name="UserNameNew"
                                                type="text" value="{{data.UserName}}">
@@ -46,7 +47,7 @@
 
 
                                     <div class="form-group">
-                                        <label for="EmailNew"> Email </label>
+                                        <label for="EmailNew">  {{locale.Get("Email")}} </label>
                                         <small class="red-color">*</small>
                                         <input class="form-control {{err.EmailNew_valid}}" id="EmailNew" name="EmailNew" type="text" value="{{data.Email}}">
 
@@ -56,7 +57,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="Phone"> Phone </label>
+                                        <label for="Phone">  {{locale.Get("Phone")}}</label>
                                         <input class="form-control {{err.Phone_valid}}" id="Phone" name="Phone"
                                                type="text" value="{{data.Phone}}">
                                         {% if err.Phone_error %}
@@ -70,7 +71,7 @@
                                 <div class="col-md-6">
 
                                     <div class="form-group">
-                                        <label for="FirstName"> First Name </label>
+                                        <label for="FirstName">{{locale.Get("First Name")}}</label>
                                         <input class="form-control {{err.FirstName_valid}}" id="FirstName"
                                                name="FirstName" type="text" value="{{data.FirstName}}">
                                         {% if err.FirstName_error %}
@@ -80,7 +81,7 @@
 
 
                                     <div class="form-group">
-                                        <label for="LastName"> Lastname </label>
+                                        <label for="LastName">  {{locale.Get("Lastname")}}</label>
                                         <input class="form-control {{err.LastName_valid}}" id="LastName" name="LastName"
                                                type="text" value="{{data.LastName}}">
                                         {% if err.LastName_error %}
@@ -105,45 +106,43 @@
                         <div class="card-body">
 
                             <div class="form-group">
-                                <label f>Password</label>
+                                <label> {{locale.Get("Password")}}</label>
                                 <button class="btn btn-primary btn-xs" onclick='NewPasswordModalBox( event)'
-                                        type="button">Set New
-                                    Password
+                                        type="button">
+                                        {{locale.Get("Set New Password ")}}
                                 </button>
 
                             </div>
 
 
                             <div class="form-group m-t-15 custom-radio-ml">
-                                <label>Roles</label>
+                                <label>{{locale.Get("Roles")}}</label>
                                 {% for role in roles %}
                                 <div class="radio radio-primary">
                                     <input id="radio{{role.ID }}" name="RoleID" type="radio" value="{{role.ID }}">
                                     <label for="radio{{role.ID }}"><span class="digits"> {{role.Title }}</span></label>
                                 </div>
                                 {% endfor %}
+
+                                {% if err.RoleID_error %}
+                                <div class="invalid-feedback" style="display:block">{{err.RoleID}}</div>
+                                {% endif %}
+
+                                <a target="_blank" href="/admin/roles/"> {{locale.Get("More information")}}</a>
+
                             </div>
 
 
                             <div class="card-footer">
-                                <button class="btn btn-sm btn-primary" type="submit"> Save</button>
+                                <button class="btn btn-sm btn-primary" type="submit"> {{locale.Get("Save")}}</button>
                             </div>
 
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
-
-
     </div>
-
-
-    </div>
-
-
 </form>
 
 

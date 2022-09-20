@@ -11,7 +11,7 @@
     <div class="col-sm-12 col-xl-6 xl-100">
         <div class="card">
           <div class="card-header pb-0">
-            <h5>Tabs Vertical</h5>
+              <h5>{{locale.Get("Roles")}}</h5>
           </div>
           <div class="card-body">
 
@@ -21,7 +21,7 @@
                 <input name="roleID" type="hidden" value="{{ roleID }}">
 
                 <div class="form-group">
-                  <label for="title">Enter Role Name</label>
+                    <label for="title"> {{locale.Get("Enter Role Name")}}</label>
                   <input class="form-control {{err.Title_valid}}" id="Title" name="Title" value="{{roleData.Title}}" type="text" placeholder="Enter Role Name"> 
                   {% if err.Title_error %}
                   <div class="invalid-feedback" style="display:block">{{err.Title}}</div>
@@ -43,9 +43,9 @@
                       <table class="table">
                       <thead>
                         <tr>
-                          <th>Capability</th>
-                          <th >Grant</th>
-                          <th>Deny</th>
+                            <th>{{locale.Get("Capability")}}</th>
+                            <th>{{locale.Get("Grant")}}</th>
+                            <th>{{locale.Get("Deny")}}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -75,22 +75,17 @@
 
 <script>
 $(function(){
-
 $('.click').change(function() {
 
 value=   $(this).attr("value");
 name= $(this).attr("name");
 
-     if (name=="grant-caps[]")
-        $('#deny'+value).prop('checked',false);
-  
-    if (name=="deny-caps[]") 
-        $('#grant'+value).prop('checked',false);
+if (name=="grant-caps[]")
+    $('#deny'+value).prop('checked',false);
 
-    });
+if (name=="deny-caps[]")
+    $('#grant'+value).prop('checked',false);
+ });
 });
-
 </script>
-
-
 {% endblock %}

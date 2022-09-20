@@ -1,0 +1,51 @@
+"Project-Id-Version: KurbanBook\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Selman Tunc <selmantunc@gmail.com>\n"
+"Language-Team: \n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.1.1\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+
+msgid "Roles"
+msgstr ""
+
+msgid "Capability"
+msgstr ""
+
+msgid "Grant"
+msgstr ""
+
+msgid "Deny"
+msgstr ""
+
+msgid "Enter Role Name"
+msgstr ""
+
+msgid "First"
+msgstr ""
+
+msgid "Last"
+msgstr ""
+
+msgid "Open"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "New Add"
+msgstr " "
+
+msgid "Roles List"
+msgstr " "
+
+msgid "Edit"
+msgstr ""
+
+msgid "Delete"
+msgstr ""

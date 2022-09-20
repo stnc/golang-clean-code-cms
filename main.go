@@ -83,11 +83,9 @@ func main() {
 
 	optionsHandle := controller.InitOptions(services.Options)
 
-	userHandle := controller.InitUserControl(services.User, services.Branch, services.Role)
+	userHandle := controller.InitUserControl(services.User, services.Branch)
 
 	login := controller.InitLogin(services.User)
-
-	role := controller.InitRoles(services.Permission, services.Modules, services.Role, services.RolePermission)
 
 	switch debugMode {
 	case "RELEASE":
@@ -165,17 +163,6 @@ func main() {
 		optionsGroup.GET("/", optionsHandle.Index)
 		optionsGroup.POST("update", optionsHandle.Update)
 		optionsGroup.GET("receiptNo", optionsHandle.ReceiptNo)
-	}
-
-	roleGroup := r.Group("/admin/roles")
-	{
-		roleGroup.GET("/knockout", role.IndexKnockout)
-		roleGroup.GET("/", role.Index)
-		roleGroup.GET("/create", role.Create)
-		roleGroup.POST("/store", role.Store)
-		roleGroup.GET("/edit/:ID", role.Edit)
-		roleGroup.POST("/update", role.Update)
-		roleGroup.GET("delete/:ID", role.Delete)
 	}
 
 	adminPost := r.Group("/admin/post")

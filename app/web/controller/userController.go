@@ -29,15 +29,17 @@ import (
 type UserControl struct {
 	UserControlApp services.UserAppInterface
 	Branch         services.BranchAppInterface
+	RoleApp        services.RoleAppInterface
 }
 
 const viewPathuserControl = "admin/user/"
 
 // InitUserControl userControl controller constructor
-func InitUserControl(KiApp services.UserAppInterface, BranchApp services.BranchAppInterface) *UserControl {
+func InitUserControl(KiApp services.UserAppInterface, BranchApp services.BranchAppInterface, RolesApp services.RoleAppInterface) *UserControl {
 	return &UserControl{
 		UserControlApp: KiApp,
 		Branch:         BranchApp,
+		RoleApp:        RolesApp,
 	}
 }
 
@@ -92,10 +94,12 @@ func (access *UserControl) Create(c *gin.Context) {
 	locale, menuLanguage := lang.LoadLanguages("user")
 	flashMsg := stncsession.GetFlashMessage(c)
 	cats, _ := access.Branch.GetAll()
+	roles, _ := access.RoleApp.GetAll()
 
 	viewData := pongo2.Context{
 		"title":       "İçerik Ekleme",
 		"catsData":    cats,
+		"roles":       roles,
 		"flashMsg":    flashMsg,
 		"csrf":        csrf.GetToken(c),
 		"locale":      locale,
@@ -116,7 +120,7 @@ func (access *UserControl) Store(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
 	locale, menuLanguage := lang.LoadLanguages("user")
 	flashMsg := stncsession.GetFlashMessage(c)
-
+	roles, _ := access.RoleApp.GetAll()
 	var userSave = userModel(c)
 	var userSavePostError = make(map[string]string)
 	userSavePostError = userSave.Validate()
@@ -139,6 +143,7 @@ func (access *UserControl) Store(c *gin.Context) {
 		"err":         userSavePostError,
 		"data":        userSave,
 		"flashMsg":    flashMsg,
+		"roles":       roles,
 		"locale":      locale,
 		"localeMenus": menuLanguage,
 	}

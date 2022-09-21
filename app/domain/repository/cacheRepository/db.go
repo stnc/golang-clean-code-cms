@@ -18,18 +18,21 @@ import (
 
 var DB *gorm.DB
 
-// Repositories strcut
+//Repositories strcut
 type Repositories struct {
-	User    services.UserAppInterface
-	Lang    services.LanguageAppInterface
-	Options services.OptionsAppInterface
-	Media   services.MediaAppInterface
-	Branch  services.BranchAppInterface
-	Post    services.PostAppInterface
-	Cat     services.CatAppInterface
-	CatPost services.CatPostAppInterface
-	Modules services.ModulesAppInterface
-	DB      *gorm.DB
+	User           services.UserAppInterface
+	Lang           services.LanguageAppInterface
+	Options        services.OptionsAppInterface
+	Media          services.MediaAppInterface
+	Branch         services.BranchAppInterface
+	Post           services.PostAppInterface
+	Cat            services.CatAppInterface
+	CatPost        services.CatPostAppInterface
+	Role           services.RoleAppInterface
+	Permission     services.PermissionAppInterface
+	RolePermission services.RolePermissionAppInterface
+	Modules        services.ModulesAppInterface
+	DB             *gorm.DB
 }
 
 //DbConnect initial
@@ -95,21 +98,23 @@ func DbConnect() *gorm.DB {
 
 //https://techinscribed.com/different-approaches-to-pass-database-connection-into-controllers-in-golang/
 
-// RepositoriesInit initial
+//RepositoriesInit initial
 func RepositoriesInit(db *gorm.DB) (*Repositories, error) {
 
 	return &Repositories{
-		User:    UserRepositoryInit(db),
-		Lang:    LanguageRepositoryInit(db),
-		Options: OptionRepositoryInit(db),
-		Media:   MediaRepositoryInit(db),
-		Branch:  BranchRepositoryInit(db),
-		Post:    PostRepositoryInit(db),
-		Cat:     CatRepositoryInit(db),
-		CatPost: CatPostRepositoryInit(db),
-
-		Modules: ModulesRepositoryInit(db),
-		DB:      db,
+		User:           UserRepositoryInit(db),
+		Lang:           LanguageRepositoryInit(db),
+		Options:        OptionRepositoryInit(db),
+		Media:          MediaRepositoryInit(db),
+		Branch:         BranchRepositoryInit(db),
+		Post:           PostRepositoryInit(db),
+		Cat:            CatRepositoryInit(db),
+		CatPost:        CatPostRepositoryInit(db),
+		Role:           RoleRepositoryInit(db),
+		Permission:     PermissionRepositoryInit(db),
+		RolePermission: RolePermissionRepositoryInit(db),
+		Modules:        ModulesRepositoryInit(db),
+		DB:             db,
 	}, nil
 }
 
@@ -118,11 +123,14 @@ func RepositoriesInit(db *gorm.DB) (*Repositories, error) {
 // 	return s.db.Close()
 // }
 
-// Automigrate This migrate all tables
+//Automigrate This migrate all tables
 func (s *Repositories) Automigrate() error {
-	s.DB.AutoMigrate(&entity.Users{},
+	s.DB.AutoMigrate(&entity.Users{}, &entity.Role{}, &entity.Permission{}, &entity.RolePermisson{},
 		&entity.Languages{}, &entity.Modules{}, &entity.Notes{},
 		&entity.Options{}, &entity.Media{}, &entity.Region{}, &entity.Branches{}, &entity.Notification{}, &entity.NotificationTemplate{},
 		&entity.Post{}, &entity.Categories{}, &entity.CategoryPosts{})
+
+	s.DB.Model(&entity.Permission{}).AddForeignKey("modul_id", "modules(id)", "CASCADE", "CASCADE")               // one to many (one=modules) (many=Permission)
+	s.DB.Model(&entity.RolePermisson{}).AddForeignKey("role_id", "rbca_role(id)", "CASCADE", "CASCADE")           // one to many (one=rbca_role) (many=RolePermisson)
 	return s.DB.Model(&entity.Branches{}).AddForeignKey("region_id", "br_region(id)", "CASCADE", "CASCADE").Error // one to many (one=region) (many=branches)
 }

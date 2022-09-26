@@ -9,12 +9,12 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-//PostRepo struct
+// PostRepo struct
 type PostRepo struct {
 	db *gorm.DB
 }
 
-//PostRepositoryInit initial
+// PostRepositoryInit initial
 func PostRepositoryInit(db *gorm.DB) *PostRepo {
 	return &PostRepo{db}
 }
@@ -22,7 +22,7 @@ func PostRepositoryInit(db *gorm.DB) *PostRepo {
 //PostRepo implements the repository.PostRepository interface
 // var _ interfaces.PostAppInterface = &PostRepo{}
 
-//Save data
+// Save data
 func (r *PostRepo) Save(post *entity.Post) (*entity.Post, map[string]string) {
 	dbErr := map[string]string{}
 	//The images are uploaded to digital ocean spaces. So we need to prepend the url. This might not be your use case, if you are not uploading image to Digital Ocean.
@@ -42,7 +42,7 @@ func (r *PostRepo) Save(post *entity.Post) (*entity.Post, map[string]string) {
 	return post, nil
 }
 
-//Update upate data
+// Update  data
 func (r *PostRepo) Update(post *entity.Post) (*entity.Post, map[string]string) {
 	dbErr := map[string]string{}
 	err := r.db.Debug().Save(&post).Error
@@ -61,7 +61,7 @@ func (r *PostRepo) Update(post *entity.Post) (*entity.Post, map[string]string) {
 	return post, nil
 }
 
-//Count fat
+// Count fat
 func (r *PostRepo) Count(postTotalCount *int64) {
 	var post entity.Post
 	var count int64
@@ -69,7 +69,7 @@ func (r *PostRepo) Count(postTotalCount *int64) {
 	*postTotalCount = count
 }
 
-//Delete data
+// Delete data
 func (r *PostRepo) Delete(id uint64) error {
 	var post entity.Post
 	var err error
@@ -80,7 +80,7 @@ func (r *PostRepo) Delete(id uint64) error {
 	return nil
 }
 
-//GetByID get data
+// GetByID get data
 func (r *PostRepo) GetByID(id uint64) (*entity.Post, error) {
 	var post entity.Post
 	var err error
@@ -94,7 +94,7 @@ func (r *PostRepo) GetByID(id uint64) (*entity.Post, error) {
 	return &post, nil
 }
 
-//GetAll all data
+// GetAll all data
 func (r *PostRepo) GetAll() ([]entity.Post, error) {
 	var posts []entity.Post
 	var err error
@@ -108,7 +108,7 @@ func (r *PostRepo) GetAll() ([]entity.Post, error) {
 	return posts, nil
 }
 
-//GetAllPagination pagination all data
+// GetAllPagination pagination all data
 func (r *PostRepo) GetAllPagination(postsPerPage int, offset int) ([]entity.Post, error) {
 	var posts []entity.Post
 	var err error

@@ -20,9 +20,11 @@ type UserAppInterface interface {
 	GetAll() ([]entity.Users, error)
 	GetAllPagination(int, int) ([]entity.Users, error)
 	Update(*entity.Users) (*entity.Users, map[string]string)
+	SetUserPassword(id uint64, password string)
 	UpdateDto(*dto.User) (*dto.User, map[string]string)
 	Count(*int64)
 	Delete(uint64) error
+
 	// SetUserUpdate(uint64, int)
 
 }
@@ -89,6 +91,9 @@ func (f *userApp) UpdateDto(User *dto.User) (*dto.User, map[string]string) {
 
 func (f *userApp) Delete(UserID uint64) error {
 	return f.request.Delete(UserID)
+}
+func (f *userApp) SetUserPassword(id uint64, password string) {
+	f.request.SetUserPassword(id, password)
 }
 
 // func (f *userApp) SetUserUpdate(id uint64, status int) {

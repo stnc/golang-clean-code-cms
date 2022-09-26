@@ -4,22 +4,13 @@
 {% set RootName = 'admin-user' %}
 {% set routerName ='admin/user' %}
 
-{% if flashMsg %}
-<div class="row">
-    <!-- alert -->
-    <div class="col-md-12 flashMsg">
-        <div class="alert alert-success alert-dismissible fade show" role="alert"> {{flashMsg}}
-            <button aria-label="Close" class="close" data-dismiss="alert" type="button">
-                <span aria-hidden="true">×</span></button>
-        </div>
-    </div>
-    <!-- /.alert -->
-</div>
-{%endif%}
+{% include "../viewComponents/alertMsg.html"%}
 
 <form accept-charset="UTF-8" action="/{{routerName}}/update" enctype="multipart/form-data" method="POST">
     <input name="_csrf" type="hidden" value="{{ csrf }}">
     <input name="_method" type="hidden" value="PUT">
+    <input name="userID" type="hidden" value="{{data.ID}}">
+    <input name="ID" type="hidden" value="{{data.ID}}">
     <div class="row">
         <div class="col-md-9">
             <div class="row">
@@ -27,7 +18,7 @@
                     <div class="card">
                         <div class="card-header">
 
-                            <strong> Add New User {{locale.Get("Create a brand new user and add them to this site.")}}</strong>
+                            <strong> {{locale.Get("Create a brand new user and add them to this site.")}}</strong>
 
                         </div>
                         <div class="card-body">
@@ -36,20 +27,20 @@
                                 <div class="col-md-6">
 
                                     <div class="form-group">
-                                        <label for="UserNameNew">  {{locale.Get("Username")}}</label>
-                                        <input class="form-control {{err.UserName_valid}}" id="UserNameNew"
-                                               name="UserNameNew"
-                                               type="text" value="{{data.UserName}}">
-                                        {% if err.UserName_error %}
-                                        <div class="invalid-feedback" style="display:block">{{err.UserName}}</div>
+                                        <label for="Username">  {{locale.Get("Username")}}</label>
+                                        <input class="form-control {{err.Username_valid}}" id="Username"
+                                               name="Username"
+                                               type="text" value="{{data.Username}}">
+                                        {% if err.Username_error %}
+                                        <div class="invalid-feedback" style="display:block">{{err.Username}}</div>
                                         {% endif %}
                                     </div>
 
 
                                     <div class="form-group">
-                                        <label for="EmailNew">  {{locale.Get("Email")}} </label>
+                                        <label for="Email">  {{locale.Get("Email")}} </label>
                                         <small class="red-color">*</small>
-                                        <input class="form-control {{err.EmailNew_valid}}" id="EmailNew" name="EmailNew" type="text" value="{{data.Email}}">
+                                        <input class="form-control {{err.Email_valid}}" id="Email" name="Email" type="text" value="{{data.Email}}">
 
                                         {% if err.Email_error %}
                                         <div class="invalid-feedback" style="display:block">{{err.Email}}</div>
@@ -57,7 +48,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="Phone">  {{locale.Get("Phone")}}</label>
+                                        <label for="Phone">{{locale.Get("Phone")}}</label>
                                         <input class="form-control {{err.Phone_valid}}" id="Phone" name="Phone"
                                                type="text" value="{{data.Phone}}">
                                         {% if err.Phone_error %}
@@ -119,7 +110,7 @@
                                 <label>{{locale.Get("Roles")}}</label>
                                 {% for role in roles %}
                                 <div class="radio radio-primary">
-                                    <input id="radio{{role.ID }}" name="RoleID" type="radio" value="{{role.ID }}">
+                                    <input id="radio{{role.ID }}"  {%if role.ID== data.RoleID %} checked {% endif %} name="RoleID" type="radio" value="{{role.ID }}">
                                     <label for="radio{{role.ID }}"><span class="digits"> {{role.Title }}</span></label>
                                 </div>
                                 {% endfor %}
@@ -179,14 +170,14 @@
     });
 
     function genPasswordNew() {
-        var chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        var chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         var PasswordNewLength = 8;
         var PasswordNew = "";
         for (var i = 0; i <= PasswordNewLength; i++) {
             var randomNumber = Math.floor(Math.random() * chars.length);
             PasswordNew += chars.substring(randomNumber, randomNumber + 1);
         }
-        document.getElementById("PasswordNew").value = PasswordNew;
+        document.getElementById("pass").value = PasswordNew;
     }
 
     //   <a  id="button" class="btn2" onclick="copyPasswordNew()">Copy</a>
@@ -196,23 +187,24 @@
     //   document.execCommand("copy");
     // }
 
-    function ShowPasswordNew() {
-        var x = document.getElementById("PasswordNew");
-        if (x.type === "PasswordNew") {
+    function HidePasswordNew() {
+        var x = document.getElementById("pass");
+        if (x.type === "password") {
             x.type = "text";
         } else {
-            x.type = "PasswordNew";
+            x.type = "password";
         }
     }
 
     function NewPasswordModalBox(e) {
         e = e || window.event;
         e.preventDefault();
+
         $.magnificPopup.open({
             items: {
-                src: "/admin/user/NewPasswordModalBox"
+                src: "/admin/user/NewPasswordModalBox/?userID="+{% autoescape off %}{{data.ID}}{% endautoescape %}
             },
-            type: 'ajax'
+            type: 'ajax',
         })
     }
 </script>

@@ -142,7 +142,7 @@ func main() {
 		}
 		c.HTML(
 			// Set the HTTP status to 200 (OK)
-			http.StatusOK,
+			http.StatusNotFound,
 			"admin/viewComponents/404.html",
 			viewData,
 		)
@@ -208,6 +208,7 @@ func main() {
 		userGroup.POST("update", userHandle.Update)
 		userGroup.GET("NewPasswordModalBox", userHandle.NewPasswordModalBox)
 		userGroup.POST("NewPasswordAjax", userHandle.NewPasswordCreateModalBox)
+		userGroup.POST("passportchange", userHandle.PassportChange)
 	}
 	//api routes
 	// v1 := r.Group("/api/v1")

@@ -326,8 +326,8 @@ func (access *Post) Update(c *gin.Context) {
 			saveCat, _ := access.catpostApp.Save(&catPost)
 			catPost.ID = saveCat.ID + 1
 		}
-		stncsession.SetFlashMessage("Kayıt başarı ile düzenlendi", "success", c)
 
+		stncsession.SetFlashMessage("Kayıt başarı ile düzenlendi", "success", c)
 		c.Redirect(http.StatusMovedPermanently, "/admin/post/edit/"+id)
 		return
 	}

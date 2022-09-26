@@ -248,7 +248,12 @@ func (r *UserRepo) GetAllPagination(datasPerPage int, offset int) ([]entity.User
 	return datas, nil
 }
 
-// SetKioskSliderUpdate update data
-func (r *UserRepo) SetUserStatusUpdate(id uint64, status int) {
-	r.db.Debug().Table("user").Where("id = ?", id).Update("status", status)
+// SetUserStatusUpdate update data
+func (r *UserRepo) SetUserStatus(id uint64, status int) {
+	r.db.Debug().Table("users").Where("id = ?", id).Update("status", status)
+}
+
+// SetKurbanBakiyeUpdate upate data
+func (r *UserRepo) SetUserPassword(id uint64, password string) {
+	r.db.Debug().Table("users").Where("id = ?", id).Update("password", password)
 }

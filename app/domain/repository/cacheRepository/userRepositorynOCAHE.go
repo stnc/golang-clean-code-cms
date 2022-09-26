@@ -56,7 +56,7 @@ func (r *UserRepo) Delete(id uint64) error {
 // SetKioskSliderUpdate update data
 func (r *UserRepo) SetUserStatusUpdate(id uint64, status int) {
 	repo := repository.UserRepositoryInit(r.db)
-	repo.SetUserStatusUpdate(id, status)
+	repo.SetUserStatus(id, status)
 }
 
 // api kullanacak
@@ -69,4 +69,8 @@ func (r *UserRepo) GetUserByEmailAndPassword2(email string, InputPassword string
 	repo := repository.UserRepositoryInit(r.db)
 	data, result := repo.GetUserByEmailAndPassword2(email, InputPassword)
 	return data, result
+}
+func (r *UserRepo) SetUserPassword(id uint64, password string) {
+	repo := repository.UserRepositoryInit(r.db)
+	repo.SetUserPassword(id, password)
 }

@@ -79,11 +79,8 @@ func (access *UserControl) Index(c *gin.Context) {
 	}
 
 	c.HTML(
-		// Set the HTTP status to 200 (OK)
 		http.StatusOK,
-		// Use the index.html template
 		viewPathuserControl+"index.html",
-		// Pass the data that the page uses
 		viewData,
 	)
 }
@@ -121,7 +118,7 @@ func (access *UserControl) Store(c *gin.Context) {
 	locale, menuLanguage := lang.LoadLanguages("user")
 	flashMsg := stncsession.GetFlashMessage(c)
 	roles, _ := access.RoleApp.GetAll()
-	var userSave = userModel(c)
+	var userSave = userModel(c, "create", "")
 	var userSavePostError = make(map[string]string)
 	userSavePostError = userSave.Validate()
 
@@ -162,11 +159,13 @@ func (access *UserControl) Edit(c *gin.Context) {
 	flashMsg := stncsession.GetFlashMessage(c)
 	if userID, err := strconv.ParseUint(c.Param("UserID"), 10, 64); err == nil {
 		if userControls, err := access.UserControlApp.GetByID(userID); err == nil {
+			roles, _ := access.RoleApp.GetAll()
 			viewData := pongo2.Context{
 				"title":       "kullanıcı düzenleme",
 				"data":        userControls,
 				"csrf":        csrf.GetToken(c),
 				"flashMsg":    flashMsg,
+				"roles":       roles,
 				"locale":      locale,
 				"localeMenus": menuLanguage,
 			}
@@ -189,41 +188,55 @@ func (access *UserControl) Edit(c *gin.Context) {
 // Delete data
 func (access *UserControl) Update(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
+	locale, menuLanguage := lang.LoadLanguages("user")
+	roles, _ := access.RoleApp.GetAll()
+	id := c.PostForm("userID")
+	id2 := stnccollection.StringtoUint64(id)
+	var pass string
+	if userData, err := access.UserControlApp.GetByID(id2); err == nil {
+		pass = userData.Password
+	}
+	var userControl = userModel(c, "edit", pass)
+	var userSavePostError = make(map[string]string)
+	userSavePostError = userControl.Validate()
 
-	// var userControl, _, id = userControlModel(c)
-	// var saveuserControlError = make(map[string]string)
+	if len(userSavePostError) == 0 {
+		_, saveErr := access.UserControlApp.Save(&userControl)
+		if saveErr != nil {
+			userSavePostError = saveErr
+		}
+		stncsession.SetFlashMessage("Kayıt başarı ile eklendi", "success", c)
+		c.Redirect(http.StatusMovedPermanently, "/"+viewPathuserControl+"edit/"+id)
+		return
+	} else {
+		stncsession.SetFlashMessage("Zorunlu alanları lütfen doldurunuz", "danger", c)
+	}
 
-	// if len(saveuserControlError) == 0 {
+	viewData := pongo2.Context{
+		"title":       "User Edit",
+		"err":         userSavePostError,
+		"csrf":        csrf.GetToken(c),
+		"data":        userControl,
+		"roles":       roles,
+		"locale":      locale,
+		"localeMenus": menuLanguage,
+	}
 
-	// 	// user bilgisi guncelleyecekılerde acabilirim
-	// 	_, saveErr := access.UserControlApp.UpdateDto(&userControl)
-	// 	if saveErr != nil {
-	// 		saveuserControlError = saveErr
-	// 	}
-
-	// 	stncsession.SetFlashMessage("Kayıt başarı ile eklendi", "success", c)
-
-	// 	c.Redirect(http.StatusModPermanently, "/"+viewPathuserControl+"edit/"+id)
-	// 	return:= pongo2.Context{
-	// 	"title": "Kullanıcı düzenlme
-	// 	"err":   saveuserControlEr,
-	//	"csrf":  csrf.GetToken(c),
-
-	// 	ata": userControl,
-	// }
-	// .HTML(
-	// 	ttp.SttusOK,
-	// 	viewPahurCotrol+"edit.html",
-	// 	ewData,
-	// )
+	c.HTML(
+		http.StatusOK,
+		viewPathuserControl+"edit.html",
+		viewData,
+	)
 }
 
 // OdemeEkleCreateModalBox takistler
 func (access *UserControl) NewPasswordModalBox(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
+	userID := c.Query("userID")
 	viewData := pongo2.Context{
-		"title": "New Password",
-		"csrf":  csrf.GetToken(c),
+		"title":  "New Password",
+		"userID": userID,
+		"csrf":   csrf.GetToken(c),
 	}
 	c.HTML(
 		http.StatusOK,
@@ -236,6 +249,7 @@ func (access *UserControl) NewPasswordModalBox(c *gin.Context) {
 func (access *UserControl) NewPasswordCreateModalBox(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
 	locale, _ := lang.LoadLanguages("user")
+	//TODO: sahte veri girisi kontrolu olcak
 	//var KurbanID uint64
 	//var kalanKurbanFiyati float64
 	//KurbanID, _ = strconv.ParseUint(c.PostForm("kurbanID"), 10, 64)
@@ -247,11 +261,11 @@ func (access *UserControl) NewPasswordCreateModalBox(c *gin.Context) {
 	//if kisiID == 1 {
 	// sahte veri girişi yani kişi atanmamış kurbana ödeme yapmaya çalışıyor  TODO: bunun loglanması lazım
 	viewData := pongo2.Context{
-		"title":  "Kurban Ekleme",
+		"title":  "passpart change",
 		"csrf":   csrf.GetToken(c),
 		"status": "err",
 		"err":    "fk", // sahte veri girişi TODO: bunun loglanması lazım
-		"errMsg": "beklenmeyen bir hata oluştu",
+		"errMsg": "unexpected error ",
 		"locale": locale,
 	}
 	c.JSON(http.StatusOK, viewData)
@@ -282,17 +296,39 @@ func (access *UserControl) NewPasswordCreateModalBox(c *gin.Context) {
 	//}
 }
 
+// referansEkleAjax save method
+func (access *UserControl) PassportChange(c *gin.Context) {
+	stncsession.IsLoggedInRedirect(c)
+	//locale, _ := lang.LoadLanguages("user")
+	userID := c.PostForm("userID")
+	pass := c.PostForm("pass")
+	access.UserControlApp.SetUserPassword(stnccollection.StringtoUint64(userID), pass)
+	viewData := pongo2.Context{
+		"title":  "Password Change",
+		"csrf":   csrf.GetToken(c),
+		"status": "ok",
+		//"errMsg": "beklenmeyen bir hata oluştu",
+		//"locale": locale,
+	}
+	c.JSON(http.StatusOK, viewData)
+}
+
 // form post model
-func userModel(c *gin.Context) (user entity.Users) {
+func userModel(c *gin.Context, form string, pass string) (user entity.Users) {
 	//	var post = entit.Post{}
-	user.Username = c.PostForm("UserNameNew")
-	user.Email = c.PostForm("EmailNew")
+	user.ID = stnccollection.StringtoUint64(c.PostForm("ID"))
+	user.Username = c.PostForm("Username")
+	user.Email = c.PostForm("Email")
 	user.FirstName = c.PostForm("FirstName")
 	user.LastName = c.PostForm("LastName")
 	user.Phone = c.PostForm("Phone")
-	pass := c.PostForm("PasswordNew")
-	sifre := security.PassGenerate(pass)
-	user.Password = sifre
+	if form == "create" {
+		pass := c.PostForm("PasswordNew")
+		sifre := security.PassGenerate(pass)
+		user.Password = sifre
+	} else {
+		user.Password = pass
+	}
 	user.RoleID = stnccollection.StringToint(c.PostForm("RoleID"))
 	return user
 }

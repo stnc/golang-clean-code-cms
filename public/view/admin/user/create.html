@@ -4,18 +4,8 @@
 {% set RootName = 'admin-user' %}
 {% set routerName ='admin/user' %}
 
-{% if flashMsg %}
-<div class="row">
-    <!-- alert -->
-    <div class="col-md-12 flashMsg">
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{flashMsg}}
-            <button class="close" type="button" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-        </div>
-    </div>
-    <!-- /.alert -->
-</div>
-{%endif%}
+{% include "../viewComponents/alertMsg.html"%}
+
 <form method="POST" action="/{{routerName}}/store" accept-charset="UTF-8" enctype="multipart/form-data">
     <input name="_csrf" type="hidden" value="{{ csrf }}">
     <input name="_method" type="hidden" value="PUT">
@@ -33,9 +23,9 @@
                                 <div class="col-md-6">
 
                                     <div class="form-group">
-                                        <label for="UserNameNew">  {{locale.Get("Username")}}</label>
-                                        <input class="form-control {{err.Username_valid}}" id="UserNameNew"
-                                               name="UserNameNew"
+                                        <label for="Username">  {{locale.Get("Username")}}</label>
+                                        <input class="form-control {{err.Username_valid}}" id="Username"
+                                               name="Username"
                                                value="{{data.Username}}" type="text">
                                         {% if err.Username_error %}
                                         <div class="invalid-feedback" style="display:block">{{err.Username}}</div>
@@ -43,9 +33,9 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="EmailNew">  {{locale.Get("Email")}} </label>
+                                        <label for="Email">  {{locale.Get("Email")}} </label>
                                         <small class="red-color">*</small>
-                                        <input class="form-control {{err.EmailNew_valid}}" id="EmailNew" name="EmailNew"
+                                        <input class="form-control {{err.Email_valid}}" id="Email" name="Email"
                                                value="{{data.Email}}" type="text">
 
                                         {% if err.Email_error %}
@@ -100,16 +90,19 @@
                             <div class="form-group">
                                 <label for="PasswordNew"> {{locale.Get("Password")}}</label>
                                 <input class="form-control {{err.Password_valid}}" id="PasswordNew" name="PasswordNew"
-                                       value="{{data.Password}}" type="Password" autocomplete="off">
+                                       value="{{data.Password}}" type="text" autocomplete="off">
                                 {% if err.Password_error %}
                                 <div class="invalid-feedback" style="display:block">{{err.Password}}</div>
                                 {% endif %}
                                 <button class="btn btn-danger btn-xs" onclick="genPasswordNew()" type="button">
                                     Generate Password
                                 </button>
-                                <button class="btn btn-info btn-xs" onclick="ShowPasswordNew()" type="button">
-                                    Show Password
+                                <button class="btn btn-info btn-xs" onclick="HidePasswordNew()" type="button">
+                                    Hide Password
                                 </button>
+
+                                buraya check box gelecek sifrenin kisiye mail olarak sms olarak gitmesini istiyorum gibi
+
                             </div>
 
                             <div class="form-group m-t-15 custom-radio-ml">
@@ -182,12 +175,12 @@
     // }
 
 
-    function ShowPasswordNew() {
+    function HidePasswordNew() {
         var x = document.getElementById("PasswordNew");
-        if (x.type === "PasswordNew") {
+        if (x.type === "passport") {
             x.type = "text";
         } else {
-            x.type = "PasswordNew";
+            x.type = "passport";
         }
     }
 </script>

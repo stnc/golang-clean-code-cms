@@ -21,7 +21,7 @@ func UserRepositoryInit(db *gorm.DB) *UserRepo {
 	return &UserRepo{db}
 }
 
-//UserRepo implements the repository.UserRepository interface
+// UserRepo implements the repository.UserRepository interface
 var _ services.UserAppInterface = &UserRepo{}
 
 func getUser(db *gorm.DB, id uint64) (*entity.Users, error) {
@@ -90,7 +90,7 @@ func (r *UserRepo) GetUsers() ([]entity.Users, error) {
 
 ///*******************************  sondaradan eklendı
 
-//GetByID get data
+// GetByID get data
 func (r *UserRepo) GetByID(id uint64) (*entity.Users, error) {
 	var data *entity.Users
 	access := repository.OptionRepositoryInit(r.db)
@@ -123,7 +123,7 @@ func getByIDuser(db *gorm.DB, id uint64) (*entity.Users, error) {
 	return data, nil
 }
 
-//GetAll all data
+// GetAll all data
 func (r *UserRepo) GetAll() ([]entity.Users, error) {
 	var data []entity.Users
 	access := repository.OptionRepositoryInit(r.db)
@@ -155,7 +155,7 @@ func getAlluser(db *gorm.DB) ([]entity.Users, error) {
 	return data, nil
 }
 
-//GetAllPagination pagination all data
+// GetAllPagination pagination all data
 func (r *UserRepo) GetAllPagination(perPage int, offset int) ([]entity.Users, error) {
 	var data []entity.Users
 	access := repository.OptionRepositoryInit(r.db)

@@ -1,52 +1,34 @@
 package controller
 
 import (
-	"encoding/json"
-	"fmt"
-	"log"
-	"net/http"
-	"stncCms/app/domain/dto"
-	"stncCms/app/domain/entity"
-	"stncCms/app/domain/helpers/lang"
-	"stncCms/app/domain/helpers/stnccollection"
-	"stncCms/app/domain/helpers/stncdatetime"
-	"strconv"
-
-	"stncCms/app/domain/helpers/stncsession"
 	"stncCms/app/services"
-
-	"github.com/astaxie/beego/utils/pagination"
-	"github.com/flosch/pongo2/v5"
-	"github.com/gin-gonic/gin"
-	csrf "github.com/utrack/gin-csrf"
 )
 
-// Permission constructor
-type Roles struct {
-	permissionApp     services.PermissionAppInterface
-	modulesApp        services.ModulesAppInterface
+// Branch constructor
+type Region struct {
+	regionApp         services.RegionAppInterface
+	branchApp         services.BranchAppInterface
 	roleApp           services.RoleAppInterface
 	rolePermissionApp services.RolePermissionAppInterface
 }
 
-const viewPathPermission = "admin/roles/"
+const viewPathRegion = "admin/region/"
 
-func InitRoles(perApp services.PermissionAppInterface, modApp services.ModulesAppInterface, rolesApp services.RoleAppInterface, rolePermApp services.RolePermissionAppInterface) *Roles {
-	return &Roles{
-		permissionApp:     perApp,
-		modulesApp:        modApp,
+func InitRegion(regionAppIn services.RegionAppInterface, branchApp services.BranchAppInterface, rolesApp services.RoleAppInterface, rolePermApp services.RolePermissionAppInterface) *Region {
+	return &Region{
+		regionApp:         regionAppIn,
+		branchApp:         branchApp,
 		roleApp:           rolesApp,
 		rolePermissionApp: rolePermApp,
 	}
 }
 
+/*
 // Index list
-func (access *Roles) Index(c *gin.Context) {
-
-	stncsession.IsLoggedInRedirect(c)
+func (access *Region) Index(c *gin.Context) {
 	//rbac.RbacCheck(c, "post-index")
 	locale, menuLanguage := lang.LoadLanguages("roles")
-	flashMsg := stncsession.GetFlashMessage(c)
+	// stncsession.IsLoggedInRedirect(c)
 	var date stncdatetime.Inow
 	var total int64
 	access.roleApp.Count(&total)
@@ -60,7 +42,6 @@ func (access *Roles) Index(c *gin.Context) {
 		"dataList":    data,
 		"date":        date,
 		"csrf":        csrf.GetToken(c),
-		"flashMsg":    flashMsg,
 		"locale":      locale,
 		"localeMenus": menuLanguage,
 	}
@@ -75,7 +56,6 @@ func (access *Roles) Index(c *gin.Context) {
 // Create all list f
 func (access *Roles) Create(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
-	flashMsg := stncsession.GetFlashMessage(c)
 	locale, menuLanguage := lang.LoadLanguages("roles")
 	var data []dto.ModulesAndPermission
 	data, _ = access.modulesApp.GetAllModulesMerge()
@@ -96,7 +76,6 @@ func (access *Roles) Create(c *gin.Context) {
 		"paginator":   paginator,
 		"title":       "permissions",
 		"datas":       data,
-		"flashMsg":    flashMsg,
 		"csrf":        csrf.GetToken(c),
 		"locale":      locale,
 		"localeMenus": menuLanguage,
@@ -107,6 +86,7 @@ func (access *Roles) Create(c *gin.Context) {
 		viewPathPermission+"create.html",
 		viewData,
 	)
+
 }
 
 // store data
@@ -120,7 +100,6 @@ func (access *Roles) Store(c *gin.Context) {
 		Title: c.PostForm("Title"),
 		Slug:  c.PostForm("Title"),
 	}
-
 	saveRoleData, _ := access.roleApp.Save(&roleData)
 	roleID := saveRoleData.ID
 	var data []dto.ModulesAndPermission
@@ -178,7 +157,6 @@ func (access *Roles) Store(c *gin.Context) {
 func (access *Roles) Edit(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
 	locale, menuLanguage := lang.LoadLanguages("roles")
-	flashMsg := stncsession.GetFlashMessage(c)
 	var data []dto.ModulesAndPermissionRole
 	if roleID, err := strconv.Atoi(c.Param("ID")); err == nil {
 		data, _ = access.modulesApp.GetAllModulesMergePermission()
@@ -194,7 +172,6 @@ func (access *Roles) Edit(c *gin.Context) {
 			"roleData":    roleData,
 			"datas":       data,
 			"roleID":      roleID,
-			"flashMsg":    flashMsg,
 			"csrf":        csrf.GetToken(c),
 			"locale":      locale,
 			"localeMenus": menuLanguage,
@@ -257,42 +234,4 @@ func (access *Roles) Delete(c *gin.Context) {
 		c.AbortWithStatus(http.StatusNotFound)
 	}
 }
-
-func (access *Roles) IndexKnockout(c *gin.Context) {
-	// allpermission, err := access.permissionApp.GetAllPaginationermission()
-	stncsession.IsLoggedInRedirect(c)
-	locale, menuLanguage := lang.LoadLanguages("roles")
-	var date stncdatetime.Inow
-	var data []dto.ModulesAndPermission
-	data, _ = access.modulesApp.GetAllModulesMerge()
-	for num, v := range data {
-		var list = []entity.Permission{}
-		list, _ = access.permissionApp.GetAllPaginationermissionForModulID(int(v.ID))
-		data[num].Permissions = list
-	}
-	// //#json formatter #stncjson https://github.com/TylerBrock/colorjson
-	empJSON, err := json.MarshalIndent(data, "", "  ")
-	if err != nil {
-		log.Fatalf(err.Error())
-	}
-	fmt.Printf("MarshalIndent funnction output\n %s\n", string(empJSON))
-	// js, _ := json.Marshal(data)
-	// fmt.Println((jsonData))
-
-	viewData := pongo2.Context{
-		"paginator":   paginator,
-		"title":       "permissions",
-		"datas":       data,
-		"json":        string(empJSON),
-		"date":        date,
-		"csrf":        csrf.GetToken(c),
-		"locale":      locale,
-		"localeMenus": menuLanguage,
-	}
-
-	c.HTML(
-		http.StatusOK,
-		viewPathPermission+"knockout.html",
-		viewData,
-	)
-}
+*/

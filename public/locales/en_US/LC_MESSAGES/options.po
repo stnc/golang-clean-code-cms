@@ -75,3 +75,6 @@ msgstr ""
 
 msgid "Cancel"
 msgstr ""
+
+msgid "New Add"
+msgstr "Yeni Ekle"

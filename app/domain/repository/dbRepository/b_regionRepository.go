@@ -2,29 +2,27 @@ package dbRepository
 
 import (
 	"errors"
+	"github.com/jinzhu/gorm"
 	"stncCms/app/domain/entity"
 	"strings"
-
-	"github.com/jinzhu/gorm"
 )
 
-// BranchRepo struct
-type BranchRepo struct {
+// RegionRepo struct
+type RegionRepo struct {
 	db *gorm.DB
 }
 
-// BranchRepositoryInit initial
-func BranchRepositoryInit(db *gorm.DB) *BranchRepo {
-	return &BranchRepo{db}
+// RegionRepositoryInit initial
+func RegionRepositoryInit(db *gorm.DB) *RegionRepo {
+	return &RegionRepo{db}
 }
 
 //PostRepo implements the repository.PostRepository interface
-// var _ interfaces.CatAppInterface = &BranchRepo{}
+// var _ interfaces.CatAppInterface = &RegionRepo{}
 
 // Save data
-func (r *BranchRepo) Save(cat *entity.Branches) (*entity.Branches, map[string]string) {
+func (r *RegionRepo) Save(cat *entity.Region) (*entity.Region, map[string]string) {
 	dbErr := map[string]string{}
-
 	err := r.db.Debug().Create(&cat).Error
 	if err != nil {
 		//since our title is unique
@@ -40,7 +38,7 @@ func (r *BranchRepo) Save(cat *entity.Branches) (*entity.Branches, map[string]st
 }
 
 // Update upate data
-func (r *BranchRepo) Update(cat *entity.Branches) (*entity.Branches, map[string]string) {
+func (r *RegionRepo) Update(cat *entity.Region) (*entity.Region, map[string]string) {
 	dbErr := map[string]string{}
 	err := r.db.Debug().Save(&cat).Error
 	if err != nil {
@@ -57,8 +55,8 @@ func (r *BranchRepo) Update(cat *entity.Branches) (*entity.Branches, map[string]
 }
 
 // GetByID get data
-func (r *BranchRepo) GetByID(id uint64) (*entity.Branches, error) {
-	var cat entity.Branches
+func (r *RegionRepo) GetByID(id uint64) (*entity.Region, error) {
+	var cat entity.Region
 	err := r.db.Debug().Where("id = ?", id).Take(&cat).Error
 	if err != nil {
 		return nil, errors.New("database error, please try again")
@@ -70,23 +68,10 @@ func (r *BranchRepo) GetByID(id uint64) (*entity.Branches, error) {
 	return &cat, nil
 }
 
-// GetByRegionID all data
-func (r *BranchRepo) GetByRegionID(regionID uint64) ([]entity.Branches, error) {
-	var cat []entity.Branches
-	err := r.db.Debug().Where("region_id = ?", regionID).Order("id asc").Find(&cat).Error
-	if err != nil {
-		return nil, err
-	}
-	if gorm.IsRecordNotFoundError(err) {
-		return nil, errors.New("post not found")
-	}
-	return cat, nil
-}
-
 // GetAll all data
-func (r *BranchRepo) GetAll() ([]entity.Branches, error) {
-	var cat []entity.Branches
-	err := r.db.Debug().Order("id desc").Find(&cat).Error
+func (r *RegionRepo) GetAll() ([]entity.Region, error) {
+	var cat []entity.Region
+	err := r.db.Debug().Order("id asc").Find(&cat).Error
 	if err != nil {
 		return nil, err
 	}
@@ -97,8 +82,8 @@ func (r *BranchRepo) GetAll() ([]entity.Branches, error) {
 }
 
 // Delete delete data
-func (r *BranchRepo) Delete(id uint64) error {
-	var cat entity.Branches
+func (r *RegionRepo) Delete(id uint64) error {
+	var cat entity.Region
 	err := r.db.Debug().Where("id = ?", id).Delete(&cat).Error
 	if err != nil {
 		return errors.New("database error, please try again")

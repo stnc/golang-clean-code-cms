@@ -10,70 +10,86 @@
     <input name="_csrf" type="hidden" value="{{ csrf }}">
     <input name="_method" type="hidden" value="PUT">
     <div class="row">
+
         <div class="col-md-9">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <strong> Add New User {{locale.Get("Create a brand new user and add them to this site.")}}</strong>
-                            <small>  </small>
+
+                            <strong> {{locale.Get("Create a brand new user and add them to this site.")}}</strong>
+
                         </div>
                         <div class="card-body">
+
                             <div class="row">
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+                                        <label for="FirstName">{{locale.Get("First Name")}}</label>
+                                        <input class="form-control {{err.FirstName_valid}}" id="FirstName"
+                                               name="FirstName" type="text" value="{{data.FirstName}}">
+                                        {% if err.FirstName_error %}
+                                        <div class="invalid-feedback" style="display:block">{{err.FirstName}}</div>
+                                        {% endif %}
+                                    </div>
+
+
+
+                                </div>
+
+                                <div class="col-md-6">
+
+
+
+                                    <div class="form-group">
+                                        <label for="LastName">  {{locale.Get("Lastname")}}</label>
+                                        <input class="form-control {{err.LastName_valid}}" id="LastName" name="LastName"
+                                               type="text" value="{{data.LastName}}">
+                                        {% if err.LastName_error %}
+                                        <div class="invalid-feedback" style="display:block">{{err.LastName}}</div>
+                                        {% endif %}
+                                    </div>
+
+
+                                </div>
+
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="Email">  {{locale.Get("Email")}} </label>
+                                        <small class="red-color">*</small>
+                                        <input class="form-control {{err.Email_valid}}" id="Email" name="Email" type="text" value="{{data.Email}}">
+
+                                        {% if err.Email_error %}
+                                        <div class="invalid-feedback" style="display:block">{{err.Email}}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+
                                 <div class="col-md-6">
 
                                     <div class="form-group">
                                         <label for="Username">  {{locale.Get("Username")}}</label>
                                         <input class="form-control {{err.Username_valid}}" id="Username"
                                                name="Username"
-                                               value="{{data.Username}}" type="text">
+                                               type="text" value="{{data.Username}}">
                                         {% if err.Username_error %}
                                         <div class="invalid-feedback" style="display:block">{{err.Username}}</div>
-                                        {% endif %}
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="Email">  {{locale.Get("Email")}} </label>
-                                        <small class="red-color">*</small>
-                                        <input class="form-control {{err.Email_valid}}" id="Email" name="Email"
-                                               value="{{data.Email}}" type="text">
-
-                                        {% if err.Email_error %}
-                                        <div class="invalid-feedback" style="display:block">{{err.Email}}</div>
-                                        {% endif %}
-                                    </div>
-
-
-                                    <div class="form-group">
-                                        <label for="Phone">  {{locale.Get("Phone")}}</label>
-                                        <small class="red-color">*</small>
-                                        <input class="form-control {{err.Phone_valid}}" id="Phone" name="Phone"
-                                               value="{{data.Phone}}" type="text">
-                                        {% if err.Phone_error %}
-                                        <div class="invalid-feedback" style="display:block">{{err.Phone}}</div>
                                         {% endif %}
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="FirstName">{{locale.Get("First Name")}}</label>
-                                        <input class="form-control {{err.FirstName_valid}}" id="FirstName"
-                                               name="FirstName" value="{{data.FirstName}}" type="text">
-                                        {% if err.FirstName_error %}
-                                        <div class="invalid-feedback" style="display:block">{{err.FirstName}}</div>
+                                        <label for="Phone">{{locale.Get("Phone")}}</label>
+                                        <input class="form-control {{err.Phone_valid}}" id="Phone" name="Phone"
+                                               type="text" value="{{data.Phone}}">
+                                        {% if err.Phone_error %}
+                                        <div class="invalid-feedback" style="display:block">{{err.Phone}}</div>
                                         {% endif %}
                                     </div>
-
-                                    <div class="form-group">
-                                        <label for="LastName">  {{locale.Get("Lastname")}}</label>
-                                        <input class="form-control {{err.LastName_valid}}" id="LastName" name="LastName"
-                                               value="{{data.LastName}}" type="text">
-                                        {% if err.LastName_error %}
-                                        <div class="invalid-feedback" style="display:block">{{err.LastName}}</div>
-                                        {% endif %}
-                                    </div>
-
                                 </div>
                             </div>
                         </div>
@@ -81,6 +97,8 @@
                 </div>
             </div>
         </div>
+
+
 
         <div class="col-md-3">
             <div class="row">
@@ -122,6 +140,41 @@
                                 <a target="_blank" href="/admin/roles/"> {{locale.Get("More information")}}</a>
                             </div>
 
+
+                            <div class="form-group m-t-15 custom-radio-ml">
+                                <label>{{locale.Get("Region")}}</label>
+
+                                <select class="form-select" id="regionID" name="regionID" >
+                                    <option selected>Open this select menu</option>
+                                    {% for region in regions %}
+                                     <option  id="radio{{region.ID }}" value="{{region.ID }}">{{region.Name }}</option>
+                                    {% endfor %}
+                                </select>
+
+
+
+                                {% if err.RoleID_error %}
+                                <div class="invalid-feedback" style="display:block">{{err.RoleID}}</div>
+                                {% endif %}
+
+                            </div>
+
+                            <div class="form-group m-t-15 custom-radio-ml">
+                                <label>{{locale.Get("Branch")}}</label>
+
+                                <select class="form-select" id="branchID" name="branchID" >
+
+                                </select>
+
+
+
+                                {% if err.RoleID_error %}
+                                <div class="invalid-feedback" style="display:block">{{err.RoleID}}</div>
+                                {% endif %}
+
+                            </div>
+
+
                             <div class="card-footer">
                                 <button class="btn btn-sm btn-primary" type="submit"> {{locale.Get("Save")}}</button>
                             </div>
@@ -144,20 +197,84 @@
 </form>
 
 
+
+
+SELECT *
+FROM users AS users
+INNER JOIN br_branches ON br_branches.id=users.id
+INNER JOIN br_region  ON br_region.id=br_branches.region_id
+WHERE (users.id=12)
+
+
 {% endblock %} {% block jsInline %}
 
 <script>
 
-
     $(document).ready(function () {
-        var some_id = $('#UserName');
-        some_id.prop('type', 'text');
-        some_id.removeAttr('autocomplete');
+
+        $('#regionID').change(function () {
+            // alert(this.value);
+            $("#branchID").attr("disabled", false);
+            getBranchListForRegion(this.value)
+        });
+
     });
 
 
+    function getBranchListForRegion(id) {
+
+        fetch("/admin/branch/getBranchListForRegion/" + id, {
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json()
+                } else {
+                    console.log("error")
+                }
+            })
+            .then(data => {
+
+                jQuery('#branchID').empty();
+
+                if (data.jsonData.length <= 0) {
+
+                    $("#branchID").attr("disabled", true);
+
+                    toastr.options = {
+                        "closeButton": true,
+                        "debug": false,
+                        "newestOnTop": true,
+                        "progressBar": true,
+                        "positionClass": "toast-top-center",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    }
+                    toastr["error"]("Bu seçimde grup bulunamadı")
+                }
+
+                $.each(data.jsonData, function (index, value) {
+                    var row = "";
+                    row += '<option value="' + value.id + '">' + value.title + '</option>';
+                    $("#branchID").append(row);
+                });
+
+            })
+            .catch((error) => {
+                console.log("error")
+            });
+    }
     function genPasswordNew() {
-        var chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        var chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         var PasswordNewLength = 8;
         var PasswordNew = "";
         for (var i = 0; i <= PasswordNewLength; i++) {
@@ -167,20 +284,12 @@
         document.getElementById("PasswordNew").value = PasswordNew;
     }
 
-    //   <a  id="button" class="btn2" onclick="copyPasswordNew()">Copy</a>
-    // function copyPasswordNew() {
-    //   var copyText = document.getElementById("PasswordNew");
-    //   copyText.select();
-    //   document.execCommand("copy");  
-    // }
-
-
     function HidePasswordNew() {
         var x = document.getElementById("PasswordNew");
-        if (x.type === "passport") {
+        if (x.type === "password") {
             x.type = "text";
         } else {
-            x.type = "passport";
+            x.type = "password";
         }
     }
 </script>

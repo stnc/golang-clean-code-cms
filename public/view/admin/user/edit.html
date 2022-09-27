@@ -27,41 +27,6 @@
                                 <div class="col-md-6">
 
                                     <div class="form-group">
-                                        <label for="Username">  {{locale.Get("Username")}}</label>
-                                        <input class="form-control {{err.Username_valid}}" id="Username"
-                                               name="Username"
-                                               type="text" value="{{data.Username}}">
-                                        {% if err.Username_error %}
-                                        <div class="invalid-feedback" style="display:block">{{err.Username}}</div>
-                                        {% endif %}
-                                    </div>
-
-
-                                    <div class="form-group">
-                                        <label for="Email">  {{locale.Get("Email")}} </label>
-                                        <small class="red-color">*</small>
-                                        <input class="form-control {{err.Email_valid}}" id="Email" name="Email" type="text" value="{{data.Email}}">
-
-                                        {% if err.Email_error %}
-                                        <div class="invalid-feedback" style="display:block">{{err.Email}}</div>
-                                        {% endif %}
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="Phone">{{locale.Get("Phone")}}</label>
-                                        <input class="form-control {{err.Phone_valid}}" id="Phone" name="Phone"
-                                               type="text" value="{{data.Phone}}">
-                                        {% if err.Phone_error %}
-                                        <div class="invalid-feedback" style="display:block">{{err.Phone}}</div>
-                                        {% endif %}
-                                    </div>
-
-
-                                </div>
-
-                                <div class="col-md-6">
-
-                                    <div class="form-group">
                                         <label for="FirstName">{{locale.Get("First Name")}}</label>
                                         <input class="form-control {{err.FirstName_valid}}" id="FirstName"
                                                name="FirstName" type="text" value="{{data.FirstName}}">
@@ -71,12 +36,59 @@
                                     </div>
 
 
+
+                                </div>
+
+                                <div class="col-md-6">
+
+
+
                                     <div class="form-group">
                                         <label for="LastName">  {{locale.Get("Lastname")}}</label>
                                         <input class="form-control {{err.LastName_valid}}" id="LastName" name="LastName"
                                                type="text" value="{{data.LastName}}">
                                         {% if err.LastName_error %}
                                         <div class="invalid-feedback" style="display:block">{{err.LastName}}</div>
+                                        {% endif %}
+                                    </div>
+
+
+                                </div>
+
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="Email">  {{locale.Get("Email")}} </label>
+                                        <small class="red-color">*</small>
+                                        <input class="form-control {{err.Email_valid}}" id="Email" name="Email" type="text" value="{{data.Email}}">
+
+                                        {% if err.Email_error %}
+                                        <div class="invalid-feedback" style="display:block">{{err.Email}}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+                                        <label for="Username">  {{locale.Get("Username")}}</label>
+                                        <input class="form-control {{err.Username_valid}}" id="Username"
+                                               name="Username"
+                                               type="text" value="{{data.Username}}">
+                                        {% if err.Username_error %}
+                                        <div class="invalid-feedback" style="display:block">{{err.Username}}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="Phone">{{locale.Get("Phone")}}</label>
+                                        <input class="form-control {{err.Phone_valid}}" id="Phone" name="Phone"
+                                               type="text" value="{{data.Phone}}">
+                                        {% if err.Phone_error %}
+                                        <div class="invalid-feedback" style="display:block">{{err.Phone}}</div>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -98,7 +110,7 @@
 
                             <div class="form-group">
                                 <label> {{locale.Get("Password")}}</label>
-                                <button class="btn btn-primary btn-xs" onclick='NewPasswordModalBox( event)'
+                                <button class="btn btn-primary btn-xs" onclick='NewPasswordModalBox( {{data.ID}})'
                                         type="button">
                                         {{locale.Get("Set New Password ")}}
                                 </button>
@@ -124,6 +136,42 @@
                             </div>
 
 
+                            <div class="form-group m-t-15 custom-radio-ml">
+                                <label>{{locale.Get("Region")}}</label>
+
+                                <select class="form-select" id="regionID" name="regionID" >
+                                    <option selected>Open this select menu</option>
+                                    {% for region in regions %}
+                                    <option  id="radio{{region.ID }}" value="{{region.ID }}">{{region.Name }}</option>
+                                    {% endfor %}
+                                </select>
+
+
+
+                                {% if err.RoleID_error %}
+                                <div class="invalid-feedback" style="display:block">{{err.RoleID}}</div>
+                                {% endif %}
+
+                            </div>
+
+                            <div class="form-group m-t-15 custom-radio-ml">
+                                <label>{{locale.Get("Branch")}}</label>
+
+                                <select class="form-select" id="branchID" name="branchID" >
+
+                                </select>
+
+
+
+                                {% if err.RoleID_error %}
+                                <div class="invalid-feedback" style="display:block">{{err.RoleID}}</div>
+                                {% endif %}
+
+                            </div>
+
+
+
+
                             <div class="card-footer">
                                 <button class="btn btn-sm btn-primary" type="submit"> {{locale.Get("Save")}}</button>
                             </div>
@@ -138,76 +186,69 @@
 
 
 {% endblock %} {% block jsInline %}
-<link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+
+{% include "../viewComponents/UserPassword.html"%}
+
 <script>
 
     $(document).ready(function () {
-        $("body").on("click", "#ShowPasswordNewClose", function (e) {
-            e.preventDefault();
-            $.magnificPopup.proto.close.call(this);
-        });
 
-        $("body").on("click", "#summitBtn", function (e) {
-            alert(`sdsd`)
-            let frm = $('form#summitBtnFrm');
-            e.preventDefault();
-            $.ajax({
-                type: frm.attr('method'),
-                url: frm.attr('action'),
-                data: frm.serialize(),
-                success: function (data) {
-                    if (data.status == "ok") {
-                        toastrCall("warning", "basarili sadds");
-                    }
-                },
-                error: function (data) {
-                    console.log('An error occurred.');
-                    console.log(data);
-                },
-            });
+        $('#regionID').change(function () {
+            // alert(this.value);
+            $("#branchID").attr("disabled", false);
+            getBranchListForRegion(this.value)
         });
     });
 
-    function genPasswordNew() {
-        var chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        var PasswordNewLength = 8;
-        var PasswordNew = "";
-        for (var i = 0; i <= PasswordNewLength; i++) {
-            var randomNumber = Math.floor(Math.random() * chars.length);
-            PasswordNew += chars.substring(randomNumber, randomNumber + 1);
-        }
-        document.getElementById("pass").value = PasswordNew;
-    }
+    function getBranchListForRegion(id) {
 
-    //   <a  id="button" class="btn2" onclick="copyPasswordNew()">Copy</a>
-    // function copyPasswordNew() {
-    //   var copyText = document.getElementById("PasswordNew");
-    //   copyText.select();
-    //   document.execCommand("copy");
-    // }
-
-    function HidePasswordNew() {
-        var x = document.getElementById("pass");
-        if (x.type === "password") {
-            x.type = "text";
-        } else {
-            x.type = "password";
-        }
-    }
-
-    function NewPasswordModalBox(e) {
-        e = e || window.event;
-        e.preventDefault();
-
-        $.magnificPopup.open({
-            items: {
-                src: "/admin/user/NewPasswordModalBox/?userID="+{% autoescape off %}{{data.ID}}{% endautoescape %}
-            },
-            type: 'ajax',
+        fetch("/admin/branch/getBranchListForRegion/" + id, {
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
         })
+            .then(response => {
+                if (response.ok) {
+                    return response.json()
+                } else {
+                    console.log("error")
+                }
+            })
+            .then(data => {
+                jQuery('#branchID').empty();
+
+                if (data.jsonData.length <= 0) {
+
+                    $("#branchID").attr("disabled", true);
+
+                    toastr.options = {
+                        "closeButton": true,
+                        "debug": false,
+                        "newestOnTop": true,
+                        "progressBar": true,
+                        "positionClass": "toast-top-center",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    }
+                    toastr["error"]("Bu seçimde grup bulunamadı")
+                }
+                $.each(data.jsonData, function (index, value) {
+                    var row = "";
+                    row += '<option value="' + value.id + '">' + value.title + '</option>';
+                    $("#branchID").append(row);
+                });
+            })
+            .catch((error) => {
+                console.log("error")
+            });
     }
 </script>
-
 
 {% endblock %}

@@ -3,65 +3,43 @@
 {% block content %}
   {% set RootName = 'admin-user' %}
   {% set routerName = 'admin/user' %}
- {% if flashMsg %}
-<div class="row">
-    <div class="col-md-12 flashMsg">
+{% include "../viewComponents/alertMsg.html"%}
 
-        <div class="alert alert-success alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <h5><i class="icon fas fa-check"></i> Uyarı!</h5>
-            {{flashMsg}}
-        </div>
-    </div>
-</div>
-{%endif%}
 
 <div class="row">
     <div class="col-lg-12">
+        <a class="btn btn-block btn-primary" href="/{{routerName}}/create" data-bs-original-title="" title="">{{locale.Get("New Add")}}</a>
         <div class="card">
             <div class="card-header"><i class="fa fa-align-justify"></i> User list</div>
             <div class="card-body">
                 <table class="table table-responsive-sm table-bordered">
                     <thead>
                         <tr>
-                            <th>{{locale.Get("Username")}}</th>
+                            <th>{{locale.Get("Email")}}</th>
+                            <th>{{locale.Get("Name Surname")}}</th>
                             <th> {{locale.Get("Date")}}</th>
-                            <th> {{locale.Get("Status")}}</th>
                             <th> {{locale.Get("Actions")}}</th>
                         </tr>
                     </thead>
                     <tbody>
 
-
                         {% for data in allData %}
-
                         <tr>
-                            <td>{{data.UserName|title|truncatechars:35 }}</td>
+                         <!-- <td>{{data.Username|title|truncatechars:35 }}</td> -->
+                            <td>{{data.Email}}</td>
+                            <td>{{data.FirstName}} {{data.LastName}}</td>
                             <td> {{tarih.OnlyDate(data.CreatedAt.String())}}</td>
-                            <td><span class="badge badge-success">
-                                     {% if data.Status==0 %}
-                                    Unpublished
-                                {% elif  data.Status==1 %}
-                                   Yayında
-                                {% elif  data.Status==3 %}
-                                 Archived
-                               {% elif  data.Status==2 %}
-                                   Draft
-                               {% endif  %} 
-                            </span></td>
                             <td>
 
-
-
-
-
                                 <a class="btn btn-warning" href="/admin/user/edit/{{data.ID}}">{{locale.Get("Edit")}}</a>
-                                <div class="btn-group btn-block-">
-             <button class="btn btn-primary dropdown-toggle btn-block-" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{locale.Get("Actions")}}</button>
-
-                                </div>
+                                <a class="btn btn-danger" href="/admin/user/delete/{{data.ID}}">{{locale.Get("Delete")}}</a>
+                                <button class="btn btn-primary btn-xs" onclick='NewPasswordModalBox( {{data.ID}})'
+                                        type="button">
+                                    {{locale.Get("Set New Password ")}}
+                                </button>
 
                             </td>
+
                         </tr>
 
                         {% endfor %}
@@ -104,4 +82,8 @@
 
 </div>
 
-{% endblock %} {% block jsInline %} {% endblock %}
+{% endblock %} {% block jsInline %}
+
+{% include "../viewComponents/UserPassword.html"%}
+
+{% endblock %}

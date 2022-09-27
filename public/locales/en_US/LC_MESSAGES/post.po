@@ -90,3 +90,6 @@ msgstr "Acik"
 
 msgid "Close"
 msgstr "Kapali"
+
+msgid "New Add"
+msgstr "Yeni Ekle"

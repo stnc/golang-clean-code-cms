@@ -18,7 +18,7 @@ import (
 
 var DB *gorm.DB
 
-//Repositories strcut
+// Repositories strcut
 type Repositories struct {
 	User           services.UserAppInterface
 	Lang           services.LanguageAppInterface
@@ -29,6 +29,7 @@ type Repositories struct {
 	Cat            services.CatAppInterface
 	CatPost        services.CatPostAppInterface
 	Role           services.RoleAppInterface
+	Region         services.RegionAppInterface
 	Permission     services.PermissionAppInterface
 	RolePermission services.RolePermissionAppInterface
 	Modules        services.ModulesAppInterface
@@ -98,7 +99,7 @@ func DbConnect() *gorm.DB {
 
 //https://techinscribed.com/different-approaches-to-pass-database-connection-into-controllers-in-golang/
 
-//RepositoriesInit initial
+// RepositoriesInit initial
 func RepositoriesInit(db *gorm.DB) (*Repositories, error) {
 
 	return &Repositories{
@@ -111,6 +112,7 @@ func RepositoriesInit(db *gorm.DB) (*Repositories, error) {
 		Cat:            CatRepositoryInit(db),
 		CatPost:        CatPostRepositoryInit(db),
 		Role:           RoleRepositoryInit(db),
+		Region:         RegionRepositoryInit(db),
 		Permission:     PermissionRepositoryInit(db),
 		RolePermission: RolePermissionRepositoryInit(db),
 		Modules:        ModulesRepositoryInit(db),
@@ -123,7 +125,7 @@ func RepositoriesInit(db *gorm.DB) (*Repositories, error) {
 // 	return s.db.Close()
 // }
 
-//Automigrate This migrate all tables
+// Automigrate This migrate all tables
 func (s *Repositories) Automigrate() error {
 	s.DB.AutoMigrate(&entity.Users{}, &entity.Role{}, &entity.Permission{}, &entity.RolePermisson{},
 		&entity.Languages{}, &entity.Modules{}, &entity.Notes{},

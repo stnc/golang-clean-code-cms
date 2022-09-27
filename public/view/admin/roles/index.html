@@ -1,14 +1,14 @@
 
 {% extends "../app.html" %} 
 {% block content %} 
-{% set RootName = 'admin-post' %}
- {% set routerName = 'admin/post' %}
+{% set RootName = 'admin-roles' %}
+ {% set routerName = 'admin/roles' %}
  {% include "../viewComponents/alertMsg.html"%}
 
 <div class="row">
     <div class="col-lg-12">
 
-        <a class="btn btn-block btn-primary" href="/admin/roles/create" data-bs-original-title="" title="">{{locale.Get("New Add")}}</a>
+        <a class="btn btn-block btn-primary" href="/{{routerName}}/create" data-bs-original-title="" title="">{{locale.Get("New Add")}}</a>
         <div class="card">
             <div class="card-header"><i class="fa fa-align-justify"></i> {{locale.Get("Roles List")}}</div>
             <div class="card-body">

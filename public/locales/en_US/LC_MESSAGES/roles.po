@@ -49,3 +49,6 @@ msgstr "Duzenle"
 
 msgid "Delete"
 msgstr "Sil"
+
+msgid "New Add"
+msgstr "Yeni Ekle"

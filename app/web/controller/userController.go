@@ -1,18 +1,20 @@
 package controller
 
 import (
-	"net/http"
-	"stncCms/app/domain/helpers/lang"
-	"stncCms/app/domain/helpers/stnccollection"
-	"stncCms/app/infrastructure/security"
-
+	"encoding/json"
+	"fmt"
 	"github.com/astaxie/beego/utils/pagination"
 	"github.com/flosch/pongo2/v5"
 	"github.com/gin-gonic/gin"
 	csrf "github.com/utrack/gin-csrf"
+	"log"
+	"net/http"
 	"stncCms/app/domain/entity"
+	"stncCms/app/domain/helpers/lang"
+	"stncCms/app/domain/helpers/stnccollection"
 	"stncCms/app/domain/helpers/stncdatetime"
 	"stncCms/app/domain/helpers/stncsession"
+	"stncCms/app/infrastructure/security"
 	"stncCms/app/services"
 	"strconv"
 )
@@ -28,25 +30,25 @@ import (
 // userControl constructor
 type UserControl struct {
 	UserControlApp services.UserAppInterface
-	Branch         services.BranchAppInterface
+	Region         services.RegionAppInterface
 	RoleApp        services.RoleAppInterface
 }
+
+//TODO: mail ile daha once uye olmusmu kontrolu olacak
 
 const viewPathuserControl = "admin/user/"
 
 // InitUserControl userControl controller constructor
-func InitUserControl(KiApp services.UserAppInterface, BranchApp services.BranchAppInterface, RolesApp services.RoleAppInterface) *UserControl {
+func InitUserControl(KiApp services.UserAppInterface, RegionApp services.RegionAppInterface, RolesApp services.RoleAppInterface) *UserControl {
 	return &UserControl{
 		UserControlApp: KiApp,
-		Branch:         BranchApp,
+		Region:         RegionApp,
 		RoleApp:        RolesApp,
 	}
 }
 
 // Index list
 func (access *UserControl) Index(c *gin.Context) {
-	// alluserControl, err := access.userControlApp.GetAlluserControl()
-
 	stncsession.IsLoggedInRedirect(c)
 	locale, menuLanguage := lang.LoadLanguages("user")
 	flashMsg := stncsession.GetFlashMessage(c)
@@ -57,8 +59,7 @@ func (access *UserControl) Index(c *gin.Context) {
 	userControlsPerPage := 10
 	paginator := pagination.NewPaginator(c.Request, userControlsPerPage, total)
 	offset := paginator.Offset()
-
-	userControls, _ := access.UserControlApp.GetAllPagination(userControlsPerPage, offset)
+	allData, _ := access.UserControlApp.GetAllPagination(userControlsPerPage, offset)
 
 	// var tarih stncdatetime.Inow
 	// fmt.Println(tarih.TarihFullSQL("2020-05-21 05:08"))
@@ -70,7 +71,7 @@ func (access *UserControl) Index(c *gin.Context) {
 	viewData := pongo2.Context{
 		"paginator":   paginator,
 		"title":       "İçerik Ekleme",
-		"allData":     userControls,
+		"allData":     allData,
 		"tarih":       tarih,
 		"flashMsg":    flashMsg,
 		"csrf":        csrf.GetToken(c),
@@ -90,12 +91,19 @@ func (access *UserControl) Create(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
 	locale, menuLanguage := lang.LoadLanguages("user")
 	flashMsg := stncsession.GetFlashMessage(c)
-	cats, _ := access.Branch.GetAll()
+	region, _ := access.Region.GetAll()
 	roles, _ := access.RoleApp.GetAll()
+
+	//#json formatter #stncjson
+	empJSON, err := json.MarshalIndent(region, "", "  ")
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+	fmt.Printf("MarshalIndent funnction output\n %s\n", string(empJSON))
 
 	viewData := pongo2.Context{
 		"title":       "İçerik Ekleme",
-		"catsData":    cats,
+		"regions":     region,
 		"roles":       roles,
 		"flashMsg":    flashMsg,
 		"csrf":        csrf.GetToken(c),
@@ -103,11 +111,8 @@ func (access *UserControl) Create(c *gin.Context) {
 		"localeMenus": menuLanguage,
 	}
 	c.HTML(
-		// Set the HTTP status to 200 (OK)
 		http.StatusOK,
-		// Use the index.html template
 		viewPathuserControl+"create.html",
-		// Pass the data that the page uses
 		viewData,
 	)
 }
@@ -160,11 +165,13 @@ func (access *UserControl) Edit(c *gin.Context) {
 	if userID, err := strconv.ParseUint(c.Param("UserID"), 10, 64); err == nil {
 		if userControls, err := access.UserControlApp.GetByID(userID); err == nil {
 			roles, _ := access.RoleApp.GetAll()
+			region, _ := access.Region.GetAll()
 			viewData := pongo2.Context{
 				"title":       "kullanıcı düzenleme",
 				"data":        userControls,
 				"csrf":        csrf.GetToken(c),
 				"flashMsg":    flashMsg,
+				"regions":     region,
 				"roles":       roles,
 				"locale":      locale,
 				"localeMenus": menuLanguage,
@@ -188,6 +195,7 @@ func (access *UserControl) Edit(c *gin.Context) {
 // Delete data
 func (access *UserControl) Update(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
+	flashMsg := stncsession.GetFlashMessage(c)
 	locale, menuLanguage := lang.LoadLanguages("user")
 	roles, _ := access.RoleApp.GetAll()
 	id := c.PostForm("userID")
@@ -199,9 +207,9 @@ func (access *UserControl) Update(c *gin.Context) {
 	var userControl = userModel(c, "edit", pass)
 	var userSavePostError = make(map[string]string)
 	userSavePostError = userControl.Validate()
-
+	region, _ := access.Region.GetAll()
 	if len(userSavePostError) == 0 {
-		_, saveErr := access.UserControlApp.Save(&userControl)
+		_, saveErr := access.UserControlApp.Update(&userControl)
 		if saveErr != nil {
 			userSavePostError = saveErr
 		}
@@ -216,6 +224,8 @@ func (access *UserControl) Update(c *gin.Context) {
 		"title":       "User Edit",
 		"err":         userSavePostError,
 		"csrf":        csrf.GetToken(c),
+		"flashMsg":    flashMsg,
+		"regions":     region,
 		"data":        userControl,
 		"roles":       roles,
 		"locale":      locale,
@@ -302,11 +312,17 @@ func (access *UserControl) PassportChange(c *gin.Context) {
 	//locale, _ := lang.LoadLanguages("user")
 	userID := c.PostForm("userID")
 	pass := c.PostForm("pass")
-	access.UserControlApp.SetUserPassword(stnccollection.StringtoUint64(userID), pass)
+	var status string = "ok"
+	if pass == "" {
+		status = "err"
+	}
+
+	encryptPass := security.PassGenerate(pass)
+	access.UserControlApp.SetUserPassword(stnccollection.StringtoUint64(userID), encryptPass)
 	viewData := pongo2.Context{
 		"title":  "Password Change",
 		"csrf":   csrf.GetToken(c),
-		"status": "ok",
+		"status": status,
 		//"errMsg": "beklenmeyen bir hata oluştu",
 		//"locale": locale,
 	}
@@ -324,11 +340,12 @@ func userModel(c *gin.Context, form string, pass string) (user entity.Users) {
 	user.Phone = c.PostForm("Phone")
 	if form == "create" {
 		pass := c.PostForm("PasswordNew")
-		sifre := security.PassGenerate(pass)
-		user.Password = sifre
+		encryptPass := security.PassGenerate(pass)
+		user.Password = encryptPass
 	} else {
 		user.Password = pass
 	}
 	user.RoleID = stnccollection.StringToint(c.PostForm("RoleID"))
+	user.BranchID = stnccollection.StringToint(c.PostForm("branchID"))
 	return user
 }

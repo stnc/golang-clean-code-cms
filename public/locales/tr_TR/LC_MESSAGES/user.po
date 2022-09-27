@@ -25,6 +25,9 @@ msgstr ""
 msgid "Email Address"
 msgstr ""
 
+msgid "Email"
+msgstr "Mail Adresi"
+
 msgid "Password"
 msgstr ""
 
@@ -106,3 +109,6 @@ msgstr "Duzenle"
 
 msgid "Delete"
 msgstr "Sil"
+
+msgid "Name Surname"
+msgstr "Adi Soyadi"

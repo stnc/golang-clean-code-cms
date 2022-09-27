@@ -83,11 +83,14 @@ func main() {
 
 	optionsHandle := controller.InitOptions(services.Options)
 
-	userHandle := controller.InitUserControl(services.User, services.Branch, services.Role)
+	userHandle := controller.InitUserControl(services.User, services.Region, services.Role)
 
 	login := controller.InitLogin(services.User)
 
 	role := controller.InitRoles(services.Permission, services.Modules, services.Role, services.RolePermission)
+
+	branch := controller.InitBranch(services.Branch, services.Role, services.RolePermission)
+	//region := controller.InitRegion(services.Region, services.Branch, services.Role, services.RolePermission)
 
 	switch debugMode {
 	case "RELEASE":
@@ -210,6 +213,12 @@ func main() {
 		userGroup.POST("NewPasswordAjax", userHandle.NewPasswordCreateModalBox)
 		userGroup.POST("passportchange", userHandle.PassportChange)
 	}
+
+	branchGroup := r.Group("/admin/branch")
+	{
+		branchGroup.GET("getBranchListForRegion/:regionID", branch.GetBranchListForRegion)
+	}
+
 	//api routes
 	// v1 := r.Group("/api/v1")
 	// {

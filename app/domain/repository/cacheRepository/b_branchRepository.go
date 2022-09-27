@@ -12,12 +12,12 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-//BranchRepo struct
+// BranchRepo struct
 type BranchRepo struct {
 	db *gorm.DB
 }
 
-//BranchRepositoryInit initial
+// BranchRepositoryInit initial
 func BranchRepositoryInit(db *gorm.DB) *BranchRepo {
 	return &BranchRepo{db}
 }
@@ -28,7 +28,7 @@ func getByIDBranch(db *gorm.DB, id uint64) (*entity.Branches, error) {
 	return datas, nil
 }
 
-//GetByID get data
+// GetByID get data
 func (r *BranchRepo) GetByID(id uint64) (*entity.Branches, error) {
 
 	var data *entity.Branches
@@ -61,7 +61,7 @@ func (r *BranchRepo) GetByID(id uint64) (*entity.Branches, error) {
 	return data, nil
 }
 
-//GetAll all data
+// GetAll all data
 func (r *BranchRepo) GetAll() ([]entity.Branches, error) {
 	access := repository.OptionRepositoryInit(r.db)
 	cacheControl := access.GetOption("cache_open_close")
@@ -92,5 +92,38 @@ func (r *BranchRepo) GetAll() ([]entity.Branches, error) {
 func getAllbranch(db *gorm.DB) ([]entity.Branches, error) {
 	repo := repository.BranchRepositoryInit(db)
 	data, _ := repo.GetAll()
+	return data, nil
+}
+
+func (r *BranchRepo) GetByRegionID(regionID uint64) ([]entity.Branches, error) {
+	access := repository.OptionRepositoryInit(r.db)
+	cacheControl := access.GetOption("cache_open_close")
+	var data []entity.Branches
+	if cacheControl == "false" {
+		data, _ = getByRegionID(regionID, r.db)
+	} else {
+		redisClient := cache.RedisDBInit()
+		key := "GetByRegionID" + stnccollection.Uint64toString(regionID)
+		cachedProducts, err := redisClient.GetKey(key)
+		if err != nil {
+			data, _ = getByRegionID(regionID, r.db)
+			err = redisClient.SetKey(key, data, time.Minute*7200) //7200 5 gun eder
+			fmt.Println("key olustur")
+			if err != nil {
+				fmt.Println("hata baş")
+			}
+			return data, nil
+		}
+		err = json.Unmarshal(cachedProducts, &data)
+		if err != nil {
+			fmt.Println("hata son")
+		}
+	}
+	return data, nil
+}
+
+func getByRegionID(regionID uint64, db *gorm.DB) ([]entity.Branches, error) {
+	repo := repository.BranchRepositoryInit(db)
+	data, _ := repo.GetByRegionID(regionID)
 	return data, nil
 }

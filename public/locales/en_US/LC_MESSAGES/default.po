@@ -5,7 +5,7 @@ msgstr ""
 "PO-Revision-Date: \n"
 "Last-Translator: Selman Tunc <selmantunc@gmail.com>\n"
 "Language-Team: \n"
-"Language: tr_TR\n"
+"Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -14,48 +14,40 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 
 msgid "Person List"
-msgstr "Kişi Listesi"
+msgstr ""
 
 msgid "Name Lastname"
-msgstr "Adı Soyadı"
-
-
+msgstr ""
 
 msgid "Phone"
-msgstr "Telefon"
-
-
+msgstr ""
 
 msgid "Adress"
-msgstr "Adres"
-
+msgstr ""
 
 msgid "Edit"
-msgstr "Düzenle"
-
+msgstr ""
 
 msgid "Confirmation"
-msgstr "Onaylama"
+msgstr ""
 
 msgid "Do You Confirm the Deletion?"
-msgstr "Silme işlemini onaylıyor musunuz?"
+msgstr ""
 
 msgid "Yes I accept"
-msgstr "Evet Kabul Ediyorum"
+msgstr ""
 
 msgid "Close"
-msgstr "Kapat"
+msgstr ""
 
 msgid "Delete"
-msgstr "Sil"
+msgstr ""
 
 msgid "Sacrifice List"
-msgstr "Kurban Listesi"
-
-
+msgstr ""
 
 msgid "Add New Sacrifice"
 msgstr ""
 
 msgid "Add New Person"
-msgstr "Yeni Kişi Ekle"
+msgstr ""

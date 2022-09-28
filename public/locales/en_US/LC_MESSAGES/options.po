@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: KurbanBook\n"
+"Project-Id-Version: go-cms\n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
 "Last-Translator: Selman Tunc <selmantunc@gmail.com>\n"
@@ -13,6 +13,7 @@ msgstr ""
 "X-Generator: Poedit 3.1.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
+
 msgid "Price Settings"
 msgstr ""
 
@@ -23,9 +24,6 @@ msgid "Receipt Automatic Order No"
 msgstr ""
 
 msgid "You can change this price once, if you change it later, it will not affect the price of the animals in the groups you previously registered."
-msgstr ""
-
-msgid "Sales Unit Price"
 msgstr ""
 
 msgid "Festival Of Sacrifices"
@@ -56,7 +54,7 @@ msgid "Note: After clearing, the cache will run slow on first run, then very fas
 msgstr ""
 
 msgid "Auto Sequence Number"
-msgstr "ı"
+msgstr ""
 
 msgid "WhatsApp Message"
 msgstr ""
@@ -75,6 +73,3 @@ msgstr ""
 
 msgid "Cancel"
 msgstr ""
-
-msgid "New Add"
-msgstr "Yeni Ekle"

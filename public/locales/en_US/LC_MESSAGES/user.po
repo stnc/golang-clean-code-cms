@@ -1,20 +1,17 @@
-"Project-Id-Version: Kurban Defteri\n"
-"POT-Creation-Date: 2018-01-05 15:39-0500\n"
-"PO-Revision-Date: 2022-02-06 22:02+0300\n"
-"Last-Translator: \n"
+msgid ""
+msgstr ""
+"Project-Id-Version: go-cms\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Selman Tunc <selmantunc@gmail.com>\n"
 "Language-Team: \n"
 "Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
-"X-Poedit-Basepath: ..\n"
-"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
-"X-Poedit-WPHeader: booked\n"
+"X-Generator: Poedit 3.1.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-SearchPath-0: .\n"
-"X-Poedit-SearchPathExcluded-0: *.js\n"
 
 msgid "Login"
 msgstr ""
@@ -25,8 +22,8 @@ msgstr ""
 msgid "Email Address"
 msgstr ""
 
-msgid "Password"
-msgstr ""
+msgid "Email"
+msgstr "Mail Adresi"
 
 msgid "Forgot password?"
 msgstr ""
@@ -43,8 +40,6 @@ msgstr ""
 msgid "Sign in"
 msgstr ""
 
-
-
 msgid "Don't have account?"
 msgstr ""
 
@@ -54,8 +49,6 @@ msgstr ""
 msgid "Create a brand new user and add them to this site."
 msgstr ""
 
-
-
 msgid "Username"
 msgstr ""
 
@@ -64,7 +57,6 @@ msgstr ""
 
 msgid "First Name"
 msgstr ""
-
 
 msgid "Lastname"
 msgstr ""
@@ -84,7 +76,6 @@ msgstr ""
 msgid "Set New Password "
 msgstr ""
 
-
 msgid "Date"
 msgstr ""
 
@@ -93,11 +84,6 @@ msgstr ""
 
 msgid "Actions"
 msgstr ""
-
-
-msgid "Actions"
-msgstr ""
-
 
 msgid "First"
 msgstr ""
@@ -117,6 +103,5 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-
-msgid "New Add"
-msgstr "Yeni Ekle"
+msgid "Name Surname"
+msgstr ""

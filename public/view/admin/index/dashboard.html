@@ -3,13 +3,63 @@
 {% set RootName = 'admin-gKurban' %}
 {% set routerName = 'admin/gKurban' %}
 {% include "../viewComponents/alertMsg.html"%}
-
+<br>
+<div class="row">
+    <div class="col-sm-6 col-xl-3 col-lg-6">
+        <div class="card o-hidden border-0">
+            <div class="bg-primary b-r-4 card-body">
+                <div class="media static-top-widget">
+                    <div class="align-self-center text-center"><i data-feather="database"></i></div>
+                    <div class="media-body"><span class="m-0">Total Post</span>
+                        <h4 class="mb-0 counter">10</h4><i class="icon-bg" data-feather="database"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3 col-lg-6">
+        <div class="card o-hidden border-0">
+            <div class="bg-secondary b-r-4 card-body">
+                <div class="media static-top-widget">
+                    <div class="align-self-center text-center"><i data-feather="shopping-bag"></i></div>
+                    <div class="media-body"><span class="m-0">Total Draft</span>
+                        <h4 class="mb-0 counter">9856</h4><i class="icon-bg" data-feather="shopping-bag"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3 col-lg-6">
+        <div class="card o-hidden border-0">
+            <div class="bg-primary b-r-4 card-body">
+                <div class="media static-top-widget">
+                    <div class="align-self-center text-center"><i data-feather="message-circle"></i></div>
+                    <div class="media-body"><span class="m-0">Messages</span>
+                        <h4 class="mb-0 counter">893</h4><i class="icon-bg" data-feather="message-circle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3 col-lg-6">
+        <div class="card o-hidden border-0">
+            <div class="bg-primary b-r-4 card-body">
+                <div class="media static-top-widget">
+                    <div class="align-self-center text-center"><i data-feather="user-plus"></i></div>
+                    <div class="media-body"><span class="m-0">New Use</span>
+                        <h4 class="mb-0 counter">4531</h4><i class="icon-bg" data-feather="user-plus"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="row">
-    <div class="col-xl-7">
+    <div class="col-xl-6">
         <div class="card o-hidden">
             <div class="card-header pb-0">
-                <h5>Aylara Gore Satislar</h5>
+                <h5>Total Post</h5>
             </div>
             <div class="bar-chart-widget">
                 <div class="bottom-content card-body">
@@ -23,26 +73,13 @@
         </div>
     </div>
 </div>
+
+
+
+
 {{title}}
 
-en cok  kesenlerin listesi
-SELECT user_id , COUNT(*) AS adet FROM s_gg GROUP BY user_id ORDER BY adet desc
 
-toplam kesilen
-toplam kazanc
-en basarili branch
-
-SELECT date_trunc('month', created_at) AS txn_month,sum(bakiye) as monthly_sum
-FROM s_gg
-GROUP BY date_trunc('month', created_at)
-ORDER BY txn_month  ASC ;
-
-SELECT TO_CHAR(created_at, 'Mon') AS month,
-EXTRACT(year from created_at) as year,
-SUM(bakiye) as desired_value
-FROM s_gg
-GROUP BY 1,2
-ORDER BY year desc
 
 
 {% endblock %}
@@ -63,12 +100,12 @@ ORDER BY year desc
         }],
         chart: {
             type: 'bar',
-            height: 350
+            height: 250
         },
         plotOptions: {
             bar: {
                 horizontal: false,
-                columnWidth: '20%',
+                columnWidth: '15%',
                 endingShape: 'rounded'
             },
         },

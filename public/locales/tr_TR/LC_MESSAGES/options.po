@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: KurbanBook\n"
+"Project-Id-Version: go-cms\n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
 "Last-Translator: Selman Tunc <selmantunc@gmail.com>\n"
@@ -12,7 +12,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.1.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-
 msgid "Price Settings"
 msgstr "Fiyat Ayarları"
 

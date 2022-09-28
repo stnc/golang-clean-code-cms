@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: KurbanBook\n"
+"Project-Id-Version: go-cms\n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
 "Last-Translator: Selman Tunc <selmantunc@gmail.com>\n"
@@ -15,5 +15,3 @@ msgstr ""
 
 msgid "Dashboard"
 msgstr "Gösterge Paneli"
-
-

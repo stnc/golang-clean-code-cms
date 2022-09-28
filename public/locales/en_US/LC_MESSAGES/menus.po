@@ -5,7 +5,7 @@ msgstr ""
 "PO-Revision-Date: \n"
 "Last-Translator: Selman Tunc <selmantunc@gmail.com>\n"
 "Language-Team: \n"
-"Language: tr_TR\n"
+"Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -14,25 +14,25 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 
 msgid "Post"
-msgstr "Sayfalar"
+msgstr ""
 
 msgid "Post Create"
-msgstr "Sayfa Olustur"
+msgstr ""
 
 msgid "Setting"
-msgstr "Ayarlar"
+msgstr ""
 
 msgid "Roles"
-msgstr "Roller"
+msgstr ""
 
 msgid "New Roles"
-msgstr "Yeni Rol"
+msgstr ""
 
 msgid "Users"
-msgstr "Kullanicilar"
+msgstr ""
 
 msgid "Logout"
-msgstr "Cikis"
+msgstr ""
 
 msgid "Menu"
-msgstr "Menu"
+msgstr ""

@@ -16,7 +16,7 @@ type UserAppInterface interface {
 	Save(*entity.Users) (*entity.Users, map[string]string)
 	SaveDto(*dto.User) (*dto.User, map[string]string)
 	GetByID(uint64) (*entity.Users, error)
-
+	GetByUserForBranchID(int) (*entity.UsersGetByUserForBranchIDDTO, error)
 	GetAll() ([]entity.Users, error)
 	GetAllPagination(int, int) ([]entity.Users, error)
 	Update(*entity.Users) (*entity.Users, map[string]string)
@@ -79,6 +79,10 @@ func (f *userApp) GetAllPagination(UsersPerPage int, offset int) ([]entity.Users
 
 func (f *userApp) GetByID(UserID uint64) (*entity.Users, error) {
 	return f.request.GetByID(UserID)
+}
+
+func (f *userApp) GetByUserForBranchID(branchID int) (*entity.UsersGetByUserForBranchIDDTO, error) {
+	return f.request.GetByUserForBranchID(branchID)
 }
 
 func (f *userApp) Update(User *entity.Users) (*entity.Users, map[string]string) {

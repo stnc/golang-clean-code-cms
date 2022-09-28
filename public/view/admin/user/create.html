@@ -197,16 +197,16 @@
 </form>
 
 
-
-
-SELECT *
+SELECT users.id,users.username,users.first_name,users.last_name,br_branches.id AS branchid,br_branches.title AS branch_name,br_region.name AS region_name,
+br_region.id AS regionID
 FROM users AS users
 INNER JOIN br_branches ON br_branches.id=users.id
 INNER JOIN br_region  ON br_region.id=br_branches.region_id
 WHERE (users.id=12)
 
+{% endblock %}
 
-{% endblock %} {% block jsInline %}
+{% block jsInline %}
 
 <script>
 

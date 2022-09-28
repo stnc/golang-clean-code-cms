@@ -206,6 +206,34 @@ func (r *UserRepo) Delete(id uint64) error {
 	return nil
 }
 
+// GetByUserForBranchID get data
+func (r *UserRepo) GetByUserForBranchID(branchID int) (*entity.UsersGetByUserForBranchIDDTO, error) {
+	var data entity.UsersGetByUserForBranchIDDTO
+	var err error
+	//SELECT br_branches.id AS branch_id,br_branches.title AS branch_name,br_region.name AS region_name,br_region.id AS region_id FROM br_branches   INNER JOIN br_region  ON br_region.id=br_branches.region_id WHERE (br_branches.id=37) LIMIT 1
+	//----------------------------------
+	//SELECT users.id,users.username,users.first_name,users.last_name,br_branches.id AS branchid,br_branches.title AS branch_name,br_region.name AS region_name,
+	//	br_region.id AS regionID
+	//FROM users AS users
+	//INNER JOIN br_branches ON br_branches.id=users.id
+	//INNER JOIN br_region  ON br_region.id=br_branches.region_id
+	//WHERE (users.id=12)
+	query := r.db.Debug().Table("br_branches")
+	query = query.Select("br_branches.id AS branch_id,br_branches.title AS branch_name,br_region.name AS region_name,br_region.id AS region_id  ")
+	query = query.Where("br_branches.id = ?", branchID)
+
+	query = query.Joins(" INNER JOIN br_region  ON br_region.id=br_branches.region_id")
+	//query = query.Order(r.queryOrder(c))
+	err = query.Take(&data).Error
+	if err != nil {
+		return nil, errors.New("database error, please try again")
+	}
+	if gorm.IsRecordNotFoundError(err) {
+		return nil, errors.New("data not found")
+	}
+	return &data, nil
+}
+
 // GetByID get data
 func (r *UserRepo) GetByID(id uint64) (*entity.Users, error) {
 	var data entity.Users

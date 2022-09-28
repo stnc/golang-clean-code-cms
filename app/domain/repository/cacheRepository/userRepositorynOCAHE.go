@@ -74,3 +74,9 @@ func (r *UserRepo) SetUserPassword(id uint64, password string) {
 	repo := repository.UserRepositoryInit(r.db)
 	repo.SetUserPassword(id, password)
 }
+
+func (r *UserRepo) GetByUserForBranchID(branchID int) (*entity.UsersGetByUserForBranchIDDTO, error) {
+	repo := repository.UserRepositoryInit(r.db)
+	data, _ := repo.GetByUserForBranchID(branchID)
+	return data, nil
+}

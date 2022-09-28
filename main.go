@@ -207,7 +207,7 @@ func main() {
 		userGroup.GET("create", userHandle.Create)
 		userGroup.POST("store", userHandle.Store)
 		userGroup.GET("edit/:UserID", userHandle.Edit)
-		// userGroup.GET("delete/:ID", userHandle.Delete)
+		userGroup.GET("delete/:ID", userHandle.Delete)
 		userGroup.POST("update", userHandle.Update)
 		userGroup.GET("NewPasswordModalBox", userHandle.NewPasswordModalBox)
 		userGroup.POST("NewPasswordAjax", userHandle.NewPasswordCreateModalBox)

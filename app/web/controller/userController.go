@@ -163,15 +163,22 @@ func (access *UserControl) Edit(c *gin.Context) {
 	locale, menuLanguage := lang.LoadLanguages("user")
 	flashMsg := stncsession.GetFlashMessage(c)
 	if userID, err := strconv.ParseUint(c.Param("UserID"), 10, 64); err == nil {
-		if userControls, err := access.UserControlApp.GetByID(userID); err == nil {
+		if userData, err := access.UserControlApp.GetByID(userID); err == nil {
 			roles, _ := access.RoleApp.GetAll()
 			region, _ := access.Region.GetAll()
+
+			dataUserForBranchID, _ := access.UserControlApp.GetByUserForBranchID(userData.BranchID)
+			branchID := dataUserForBranchID.BranchID
+			regionID := dataUserForBranchID.RegionID
+
 			viewData := pongo2.Context{
 				"title":       "kullanıcı düzenleme",
-				"data":        userControls,
+				"data":        userData,
 				"csrf":        csrf.GetToken(c),
 				"flashMsg":    flashMsg,
 				"regions":     region,
+				"branchID":    branchID,
+				"regionID":    regionID,
 				"roles":       roles,
 				"locale":      locale,
 				"localeMenus": menuLanguage,
@@ -255,7 +262,7 @@ func (access *UserControl) NewPasswordModalBox(c *gin.Context) {
 	)
 }
 
-// referansEkleAjax save method
+// ajax save method
 func (access *UserControl) NewPasswordCreateModalBox(c *gin.Context) {
 	stncsession.IsLoggedInRedirect(c)
 	locale, _ := lang.LoadLanguages("user")
@@ -327,6 +334,19 @@ func (access *UserControl) PassportChange(c *gin.Context) {
 		//"locale": locale,
 	}
 	c.JSON(http.StatusOK, viewData)
+}
+
+// Delete data
+func (access *UserControl) Delete(c *gin.Context) {
+	stncsession.IsLoggedInRedirect(c)
+	if postID, err := strconv.ParseUint(c.Param("ID"), 10, 64); err == nil {
+		access.UserControlApp.Delete(postID)
+		stncsession.SetFlashMessage("Success Delete", "success", c)
+		c.Redirect(http.StatusMovedPermanently, "/admin/user")
+		return
+	} else {
+		c.AbortWithStatus(http.StatusNotFound)
+	}
 }
 
 // form post model

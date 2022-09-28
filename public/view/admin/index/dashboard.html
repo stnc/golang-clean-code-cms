@@ -1,20 +1,107 @@
-{% extends "../app.html" %} 
-{% block content %} 
-{% set RootName = 'admin-gKurban' %} 
+{% extends "../app.html" %}
+{% block content %}
+{% set RootName = 'admin-gKurban' %}
 {% set routerName = 'admin/gKurban' %}
 {% include "../viewComponents/alertMsg.html"%}
 
+
 <div class="row">
-
-    {{title}}
-
+    <div class="col-xl-7">
+        <div class="card o-hidden">
+            <div class="card-header pb-0">
+                <h5>Aylara Gore Satislar</h5>
+            </div>
+            <div class="bar-chart-widget">
+                <div class="bottom-content card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div id="chart-widget4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+{{title}}
+
+en cok  kesenlerin listesi
+SELECT user_id , COUNT(*) AS adet FROM s_gg GROUP BY user_id ORDER BY adet desc
+
+toplam kesilen
+toplam kazanc
+en basarili branch
+
+SELECT date_trunc('month', created_at) AS txn_month,sum(bakiye) as monthly_sum
+FROM s_gg
+GROUP BY date_trunc('month', created_at)
+ORDER BY txn_month  ASC ;
+
+SELECT TO_CHAR(created_at, 'Mon') AS month,
+EXTRACT(year from created_at) as year,
+SUM(bakiye) as desired_value
+FROM s_gg
+GROUP BY 1,2
+ORDER BY year desc
 
 
+{% endblock %}
 
+{% block jsInline %}
 
+<script src="./assets/admin/js/chart/apex-chart/moment.min.js"></script>
+<script src="/assets/admin/js/chart/apex-chart/apex-chart.js"></script>
+<script src="/assets/admin/js/chart/apex-chart/stock-prices.js"></script>
+<script src="./assets/admin/js/chart/apex-chart/apex-chart.js"></script>
+<script>
 
+    var options = {
+        series: [
+            {
+            name: 'Kazanilan Para',
+            data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
+        }],
+        chart: {
+            type: 'bar',
+            height: 350
+        },
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                columnWidth: '20%',
+                endingShape: 'rounded'
+            },
+        },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            show: true,
+            width: 2,
+            colors: ['transparent']
+        },
+        xaxis: {
+            categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+        },
+        yaxis: {
+            title: {
+                text: '$ (thousands)'
+            }
+        },
+        fill: {
+            opacity: 1
+        },
+        tooltip: {
+            y: {
+                formatter: function (val) {
+                    return "$ " + val + " thousands"
+                }
+            }
+        }
+    };
 
+    var chart = new ApexCharts(document.querySelector("#chart-widget4"), options);
+    chart.render();
 
-
+</script>
 {% endblock %}

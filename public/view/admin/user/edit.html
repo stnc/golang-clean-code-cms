@@ -142,10 +142,9 @@
                                 <select class="form-select" id="regionID" name="regionID" >
                                     <option selected>Open this select menu</option>
                                     {% for region in regions %}
-                                    <option  id="radio{{region.ID }}" value="{{region.ID }}">{{region.Name }}</option>
+                                    <option  id="radio{{region.ID }}"    {% if region.ID == regionID %}  selected {% endif %} value="{{region.ID }}">{{region.Name }}</option>
                                     {% endfor %}
                                 </select>
-
 
 
                                 {% if err.RoleID_error %}
@@ -196,11 +195,17 @@
         $('#regionID').change(function () {
             // alert(this.value);
             $("#branchID").attr("disabled", false);
-            getBranchListForRegion(this.value)
+            getBranchListForRegion(this.value,0)
         });
     });
 
-    function getBranchListForRegion(id) {
+
+    setTimeout(function(){
+        getBranchListForRegion({% autoescape off %}{{regionID}}{% endautoescape %}, {% autoescape off %}{{branchID}}{% endautoescape %})
+    }, 1000);
+
+
+    function getBranchListForRegion(id,regionID) {
 
         fetch("/admin/branch/getBranchListForRegion/" + id, {
             method: 'GET',
@@ -240,8 +245,16 @@
                     toastr["error"]("Bu seçimde grup bulunamadı")
                 }
                 $.each(data.jsonData, function (index, value) {
-                    var row = "";
-                    row += '<option value="' + value.id + '">' + value.title + '</option>';
+                    let row = "";
+                    if (regionID==0){
+                        row += '<option value="' + value.id + '">' + value.title + '</option>';
+                    }else {
+                      let selectedOk=""
+                        if (value.id == regionID ){
+                            selectedOk="selected"
+                        }
+                        row += '<option  '+ selectedOk+ ' value="' + value.id + '">' + value.title + '</option>';
+                    }
                     $("#branchID").append(row);
                 });
             })

@@ -40,6 +40,18 @@ type Users struct {
 	DeletedAt *time.Time `json:"deletedAt"`
 }
 
+type UsersGetByUserForBranchIDDTO struct {
+	//ID         uint64 `json:"id"`
+	//UserID     uint64 `json:"userId"`
+	//Username   string `json:"username"`
+	//FirstName  string `json:"first_name"`
+	//LastName   string `json:"last_name"`
+	BranchID   uint64 `json:"branchID"`
+	RegionName string `json:"regionName"`
+	BranchName string `json:"branchName"`
+	RegionID   uint64 `json:"regionID"`
+}
+
 // PublicUser
 type PublicUser struct {
 	ID        uint64 `gorm:"primary_key;auto_increment" json:"id"`
